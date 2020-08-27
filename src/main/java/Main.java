@@ -1,3 +1,11 @@
+/*---------------------------------------------------------
+file: <<Main.java>>
+  by: Joseph Morelli
+ org: COP 3003, Fall 2020
+ for: Introduction to Gradle project; 3 production
+      tabs and a login screen created and displayed.
+---------------------------------------------------------*/
+
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -22,6 +30,7 @@ public class Main extends Application {
   @Override
   public void start(Stage primaryStage) {
 
+    //creates text fields for login credentials
     primaryStage.setTitle("JavaFX Welcome");
     GridPane grid = new GridPane();
     grid.setAlignment(Pos.CENTER);
@@ -45,6 +54,7 @@ public class Main extends Application {
     PasswordField pwBox = new PasswordField();
     grid.add(pwBox, 1, 2);
 
+    //creates login button
     Button btn = new Button("Sign in");
     HBox hbBtn = new HBox(10);
     hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
@@ -54,6 +64,7 @@ public class Main extends Application {
     final Text actiontarget = new Text();
     grid.add(actiontarget, 1, 6);
 
+    //handles button action when pressed
     btn.setOnAction(new EventHandler<>() {
 
       @Override
@@ -64,13 +75,15 @@ public class Main extends Application {
         } catch (IOException ioException) {
           ioException.printStackTrace();
         }
-        primaryStage.setTitle("TabPane Example");
+        //displays tab selection after successful login
+        primaryStage.setTitle("Tab Panels");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
 
       }
     });
 
+    //displays login screen
     Scene scene = new Scene(grid, 300, 275);
     primaryStage.setScene(scene);
     scene.getStylesheets().add(

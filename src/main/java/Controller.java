@@ -1,3 +1,11 @@
+/*---------------------------------------------------------
+file: Controller.java
+  by: Joseph Morelli
+ org: COP 3003, Fall 2020
+ for: Controller for all tab pages; assigns their
+      content and handles exceptions
+---------------------------------------------------------*/
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;

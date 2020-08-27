@@ -1,3 +1,10 @@
+/*---------------------------------------------------------
+file: <<styling.css>>
+  by: Joseph Morelli
+ org: COP 3003, Fall 2020
+ for: Creates styling for login scene
+---------------------------------------------------------*/
+
 .button {
   -fx-text-fill: white;
   -fx-font-family: "Arial Narrow";
