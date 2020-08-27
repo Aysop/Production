@@ -13,9 +13,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -23,7 +20,7 @@ public class Main extends Application {
 
 
   @Override
-  public void start(Stage primaryStage) throws Exception {
+  public void start(Stage primaryStage) {
 
     primaryStage.setTitle("JavaFX Welcome");
     GridPane grid = new GridPane();
@@ -57,7 +54,7 @@ public class Main extends Application {
     final Text actiontarget = new Text();
     grid.add(actiontarget, 1, 6);
 
-    btn.setOnAction(new EventHandler<ActionEvent>() {
+    btn.setOnAction(new EventHandler<>() {
 
       @Override
       public void handle(ActionEvent e) {
