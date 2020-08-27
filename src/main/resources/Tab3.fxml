@@ -1,10 +1,3 @@
-<!--************************
-file: Tab3.fxml
-  by: Joseph Morelli
- org: COP 3003, Fall 2020
- for: Sets tab 3 defaults
- *************************-->
-
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>

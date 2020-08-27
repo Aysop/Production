@@ -1,10 +1,3 @@
-<!--************************
-file: Tab2.fxml
-  by: Joseph Morelli
- org: COP 3003, Fall 2020
- for: Sets tab 2 defaults
- *************************-->
-
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -13,6 +6,6 @@ file: Tab2.fxml
   xmlns:fx="http://javafx.com/fxml"
   fx:controller="Tab2Controller"
   prefHeight="400.0" prefWidth="600.0">
-  <Label text="This is Tab 2  " translateX="10"></Label>
+  <Label text="This is Tab 2 " translateX="10"></Label>
 
 </AnchorPane>
