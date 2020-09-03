@@ -12,7 +12,7 @@ public class Controller {
 
   // below handles button mouse-click actions
   public void addProduct(MouseEvent mouseEvent) {
-    System.out.println("Early bird gets the worm...");
+    System.out.println("The early bird gets the worm...");
   }
 
   public void recordProduction(MouseEvent mouseEvent) {
