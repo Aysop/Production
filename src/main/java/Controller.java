@@ -10,7 +10,7 @@ import javafx.scene.input.MouseEvent;
 
 public class Controller {
 
-  // below handles button mouse-click actions
+  // handles button mouse-click actions
   public void addProduct(MouseEvent mouseEvent) {
     System.out.println("The early bird gets the worm...");
   }
