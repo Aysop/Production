@@ -10,11 +10,12 @@ import javafx.scene.input.MouseEvent;
 
 public class Controller {
 
+  // below handles button mouse-click actions
   public void addProduct(MouseEvent mouseEvent) {
-    System.out.println("Fucking Finally");
+    System.out.println("Early bird gets the worm...");
   }
 
   public void recordProduction(MouseEvent mouseEvent) {
-    System.out.println("About time, muh fucka");
+    System.out.println("...but the second mouse gets the cheese.");
   }
 }
