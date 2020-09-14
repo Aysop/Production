@@ -52,7 +52,7 @@ public class Controller {
       //STEP 3: Execute a query
       stmt = conn.createStatement();
 
-      String sql = "SELECT * FROM Bike";
+      String sql = "SELECT * FROM PRODUCT";
 
       ResultSet rs = stmt.executeQuery(sql);
       while (rs.next()) {
