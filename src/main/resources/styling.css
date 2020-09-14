@@ -9,8 +9,10 @@ file: <<styling.css>>
   -fx-background-image: url("background.jpg");
 }
 
-.label {
+.root {
   -fx-font-family: "Sitka Subheading";
   -fx-text-fill: white;
+  -fx-font-weight: bold;
   -fx-font-size: 13px;
+  -fx-base: rgb(139, 0, 0);
 }
