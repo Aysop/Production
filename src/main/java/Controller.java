@@ -125,6 +125,8 @@ public class Controller {
         stmt.setString(3, prodName);
 
         stmt.executeUpdate();
+        userFieldsToList();
+
 
       } catch (NullPointerException e) {
         errorLabel.setText("Please select a product type.");
@@ -154,7 +156,6 @@ public class Controller {
       }//end finally try
     }
 
-    userFieldsToList();
 
   }
 
