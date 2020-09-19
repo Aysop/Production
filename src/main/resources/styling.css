@@ -6,12 +6,20 @@ file: <<styling.css>>
 ---------------------------------------------------------*/
 
 #AnchorPane {
-  -fx-background-image: url("background.jpg");
+  background-color: white;
 }
 
 .root {
   -fx-font-family: "Sitka Subheading";
   -fx-text-fill: white;
-  -fx-font-size: 13px;
-  -fx-base: steelblue;
+  -fx-font-size: 14px;
+}
+
+.button {
+  -fx-background-color: orangered;
+  -fx-text-fill: white;
+}
+
+.error_text {
+  -fx-text-fill: orangered;
 }
