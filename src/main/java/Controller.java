@@ -94,7 +94,7 @@ public class Controller {
 
     final String USER = "";
 
-    final String PASS = "";
+    final String PASS = ""; // SpotBug finds "Security" issue, no password
 
     Connection conn = null;
 
@@ -105,7 +105,7 @@ public class Controller {
       // STEP 1: Register JDBC driver
 
       Class.forName(JDBC_DRIVER);
-
+      //SpotBugs finds "Bad Practice" here, method may fail to close db resource
       //STEP 2: Open a connection
 
       conn = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -175,7 +175,7 @@ public class Controller {
   /**
    * Populates database list
    */
-  public void populateDB() {
+  public void populateDB() {  // SpotBugs finds "Experimental", may fail to clean up rs checked exception
 
     final String JDBC_DRIVER = "org.h2.Driver";
 
@@ -185,7 +185,7 @@ public class Controller {
 
     final String USER = "";
 
-    final String PASS = "";
+    final String PASS = ""; // SpotBug finds "Security" issue, no password
 
     Connection conn = null;
 
@@ -239,7 +239,7 @@ public class Controller {
   /**
    * Adds users entries to GUI database list
    */
-  public void userFieldsToList() {
+  public void userFieldsToList() { // SpotBugs finds "Experimental" here, may fail to clean up rs checked exception
     final String JDBC_DRIVER = "org.h2.Driver";
 
     final String DB_URL = "jdbc:h2:./res/productionDB";
@@ -248,7 +248,7 @@ public class Controller {
 
     final String USER = "";
 
-    final String PASS = "";
+    final String PASS = ""; // SpotBug finds "Security" issue, no password
 
     Connection conn = null;
 
