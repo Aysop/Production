@@ -75,10 +75,12 @@ public class Controller {
    * populates choice box on Product Line tab
    */
   public void choiceBoxSelect() {
-    choiceBox.getItems().add("AUDIO");
-    choiceBox.getItems().add("VISUAL");
-    choiceBox.getItems().add("AUDIO_MOBILE");
-    choiceBox.getItems().add("VIDEO_MOBILE");
+
+    for (ItemType item : ItemType.values()) {
+      choiceBox.getItems().add(item);
+    }
+
+
   }
 
   /**
@@ -117,16 +119,20 @@ public class Controller {
       try {
         String prodName = nameText.getText();
         String prodManufacturer = manufacturerText.getText();
-        String prodType = choiceBox.getValue().toString();
+        String prodType = ItemType.valueOf(choiceBox.getValue().toString()).code();
+
         String sql = " INSERT INTO Product(type, manufacturer, name) VALUES ( ?, ?, ? )";
-        stmt = conn.prepareStatement(sql);
-        stmt.setString(1, prodType);
-        stmt.setString(2, prodManufacturer);
-        stmt.setString(3, prodName);
+        if (prodManufacturer.equals("") || prodManufacturer.equals("")) {
+          errorLabel.setText("Please fill in all forms");
+        } else {
+          stmt = conn.prepareStatement(sql);
+          stmt.setString(1, prodType);
+          stmt.setString(2, prodManufacturer);
+          stmt.setString(3, prodName);
 
-        stmt.executeUpdate();
-        userFieldsToList();
-
+          stmt.executeUpdate();
+          userFieldsToList();
+        }
 
       } catch (NullPointerException e) {
         errorLabel.setText("Please select a product type.");
@@ -213,7 +219,7 @@ public class Controller {
       while (rs.next()) {
 
         obList.add(
-            new Product(rs.getString("name"), rs.getString("manufacturer"), rs.getString("type")));
+            new Widget(rs.getString("name"), rs.getString("manufacturer"), rs.getString("type")));
 
       }
 
@@ -276,7 +282,7 @@ public class Controller {
       while (rs.next()) {
 
         obList.add(
-            new Product(rs.getString("name"), rs.getString("manufacturer"), rs.getString("type")));
+            new Widget(rs.getString("name"), rs.getString("manufacturer"), rs.getString("type")));
 
       }
 

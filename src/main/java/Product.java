@@ -6,40 +6,51 @@ file: Product.java
 ---------------------------------------------------------*/
 
 
-public class Product {
+public abstract class Product implements Item{
 
-  /**
-   * Product gets and sets
-   *
-   * @return the products name
-   */
-  public String getName() {
+/**
+ * Product get
+ *
+ * @return the products id
+ * <p>
+ * Product gets and sets
+ * @return the products name
+ */
+//public int getId() {
+//  return id;
+//}
+
+/**
+ * Product gets and sets
+ *
+ * @return the products name
+ */
+public String getName(){
     return name;
-  }
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+public void setName(String name){
+    this.name=name;
+    }
 
-  /**
-   * Product gets and sets
-   *
-   * @return the products manufacturer
-   */
+/**
+ * Product gets and sets
+ *
+ * @return the products manufacturer
+ */
 
-  public String getManufacturer() {
+public String getManufacturer(){
     return manufacturer;
-  }
+    }
 
-  public void setManufacturer(String manufacturer) {
-    this.manufacturer = manufacturer;
-  }
+public void setManufacturer(String manufacturer){
+    this.manufacturer=manufacturer;
+    }
 
-  /**
-   * Product gets and sets
-   *
-   * @return the products type
-   */
+    // variable declarations
+    int id;
+    String name;
+    String manufacturer;
 
   public String getType() {
     return type;
@@ -49,23 +60,21 @@ public class Product {
     this.type = type;
   }
 
-  // variable declarations
-  String name;
-  String manufacturer;
   String type;
 
-  /**
-   * Product Constructor
-   *
-   * @param name         The product's name
-   * @param manufacturer The product's manufacturer
-   * @param type         The product's type
-   */
-  public Product(String name, String manufacturer, String type) {
-    this.name = name;
-    this.manufacturer = manufacturer;
-    this.type = type;
-  }
+/**
+ * Product Constructor
+ *
+ * @param name         The product's name
+ * @param manufacturer The product's manufacturer
+ * @param type         The product's type
+ */
 
+public Product(String name,String manufacturer,String type){
+    //this.id = id;
+    this.name=name;
+    this.manufacturer=manufacturer;
+    this.type=type;
+    }
 
-}
+    }
