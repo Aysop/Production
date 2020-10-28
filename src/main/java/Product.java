@@ -51,16 +51,17 @@ public void setManufacturer(String manufacturer){
     int id;
     String name;
     String manufacturer;
+    ItemType type;
 
-  public String getType() {
+  public ItemType getType() {
     return type;
   }
 
-  public void setType(String type) {
+  public void setType(ItemType type) {
     this.type = type;
   }
 
-  String type;
+
 
 /**
  * Product Constructor
@@ -70,11 +71,33 @@ public void setManufacturer(String manufacturer){
  * @param type         The product's type
  */
 
-public Product(String name,String manufacturer,String type){
+public Product(String name,String manufacturer,ItemType type){
     //this.id = id;
     this.name=name;
     this.manufacturer=manufacturer;
     this.type=type;
     }
 
-    }
+  public String toString(){
+    return "Name: " + name + "\n" + "Manufacturer: " + manufacturer + "\n" +"Type: " + type.code;
+  }
+
+
+
+
+}
+class Widget extends Product {
+
+  /**
+   * Product Constructor
+   *
+   * @param name         The product's name
+   * @param manufacturer The product's manufacturer
+   * @param type         The product's type
+   */
+  public Widget(String name, String manufacturer, ItemType type)  {
+    super(name, manufacturer, type);
+  }
+
+
+}

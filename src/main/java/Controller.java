@@ -7,6 +7,7 @@ file: Controller.java
 ---------------------------------------------------------*/
 
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ChoiceBox;
@@ -14,6 +15,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
@@ -28,23 +30,25 @@ public class Controller {
 
   @FXML
   public TableView<Product> productList;
-  public TableColumn<Product, String> typeCol;
+  public TableColumn<Product, ItemType> typeCol;
   public TableColumn<Product, String> nameCol;
   public TableColumn<Product, String> manufacturerCol;
-  public ChoiceBox choiceBox;
+  public ChoiceBox<ItemType> choiceBox;
   public TextField nameText;
   public TextField manufacturerText;
-  public ComboBox cmbBox;
+  public ComboBox<String> cmbBox;
   public Label errorLabel;
+  public TextArea productRecord;
+  ArrayList<String> logs = new ArrayList<>() ;
+  int count = 0;
 
-  ObservableList<Product> obList = FXCollections.observableArrayList();
+  ObservableList<Product> productLine = FXCollections.observableArrayList();
 
 
   /**
    * Handles button actions on Product Line tab
    */
   public void addProduct(MouseEvent mouseEvent) {
-
     addToDB();
   }
 
@@ -77,6 +81,7 @@ public class Controller {
   public void choiceBoxSelect() {
 
     for (ItemType item : ItemType.values()) {
+
       choiceBox.getItems().add(item);
     }
 
@@ -119,19 +124,24 @@ public class Controller {
       try {
         String prodName = nameText.getText();
         String prodManufacturer = manufacturerText.getText();
-        String prodType = ItemType.valueOf(choiceBox.getValue().toString()).code();
+        ItemType prodType = choiceBox.getValue();
 
         String sql = " INSERT INTO Product(type, manufacturer, name) VALUES ( ?, ?, ? )";
-        if (prodManufacturer.equals("") || prodManufacturer.equals("")) {
+        if (prodName.equals("") || prodManufacturer.equals("")) {
           errorLabel.setText("Please fill in all forms");
         } else {
           stmt = conn.prepareStatement(sql);
-          stmt.setString(1, prodType);
+          stmt.setString(1, prodType.toString());
           stmt.setString(2, prodManufacturer);
           stmt.setString(3, prodName);
+          Widget newProduct = new Widget(prodName, prodManufacturer, prodType);
 
           stmt.executeUpdate();
           userFieldsToList();
+          addToLog(newProduct, count);
+          count++;
+          nameText.clear();
+          manufacturerText.clear();
         }
 
       } catch (NullPointerException e) {
@@ -139,19 +149,17 @@ public class Controller {
       }
 
 
-    } catch (SQLException se) {
+    } catch (Exception se) {
       //Handle errors for JDBC
       se.printStackTrace();
-    } catch (Exception e) {
-      //Handle errors for Class.forName
-      e.printStackTrace();
-    } finally {
+    }//Handle errors for Class.forName
+    finally {
       //finally block used to close resources
       try {
         if (stmt != null) {
           conn.close();
         }
-      } catch (SQLException se) {
+      } catch (SQLException ignored) {
       }// do nothing
       try {
         if (conn != null) {
@@ -173,9 +181,9 @@ public class Controller {
 
     nameCol.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
     manufacturerCol.setCellValueFactory(new PropertyValueFactory<Product, String>("manufacturer"));
-    typeCol.setCellValueFactory(new PropertyValueFactory<Product, String>("type"));
+    typeCol.setCellValueFactory(new PropertyValueFactory<Product, ItemType>("type"));
 
-    productList.setItems(obList);
+    productList.setItems(productLine);
 
   }
 
@@ -218,10 +226,11 @@ public class Controller {
 
       while (rs.next()) {
 
-        obList.add(
-            new Widget(rs.getString("name"), rs.getString("manufacturer"), rs.getString("type")));
-
+        productLine.add(
+            new Widget(rs.getString("name"), rs.getString("manufacturer"),
+                ItemType.valueOf((rs.getString("type")))));
       }
+
 
       // STEP 4: Clean-up environment
 
@@ -229,18 +238,12 @@ public class Controller {
 
       conn.close();
 
-    } catch (ClassNotFoundException e) {
+    } catch (ClassNotFoundException | SQLException e) {
 
       e.printStackTrace();
 
-
-    } catch (SQLException e) {
-
-      e.printStackTrace();
 
     }
-
-
   }
 
   /**
@@ -281,8 +284,9 @@ public class Controller {
 
       while (rs.next()) {
 
-        obList.add(
-            new Widget(rs.getString("name"), rs.getString("manufacturer"), rs.getString("type")));
+        productLine.add(
+            new Widget(rs.getString("name"), rs.getString("manufacturer"),
+                 choiceBox.getValue()));
 
       }
 
@@ -292,17 +296,23 @@ public class Controller {
 
       conn.close();
 
-    } catch (ClassNotFoundException e) {
+    } catch (ClassNotFoundException | SQLException e) {
 
       e.printStackTrace();
 
-
-    } catch (SQLException e) {
-
-      e.printStackTrace();
 
     }
   }
+
+  public void addToLog(Product product, int count){
+    productRecord.setText("");
+    ProductionRecord recordLog = new ProductionRecord(product, count);
+    logs.add(recordLog.toString());
+    for(String a : logs){
+      productRecord.appendText(a + "\n");
+    }
+  }
+
 
 }
 
