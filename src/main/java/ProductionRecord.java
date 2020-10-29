@@ -7,6 +7,8 @@ public class ProductionRecord {
   String serialNumber;
   Date dateProduced;
 
+
+
   public int getProductionNumber() {
     return productionNumber;
   }

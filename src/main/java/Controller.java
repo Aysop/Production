@@ -39,8 +39,13 @@ public class Controller {
   public ComboBox<String> cmbBox;
   public Label errorLabel;
   public TextArea productRecord;
-  ArrayList<String> logs = new ArrayList<>() ;
-  int count = 0;
+  public TableColumn idCol;
+
+  ArrayList<String> logs = new ArrayList<>();
+  int countAU = 0;
+  int countVI = 0;
+  int countAM = 0;
+  int countVM = 0;
 
   ObservableList<Product> productLine = FXCollections.observableArrayList();
 
@@ -138,10 +143,29 @@ public class Controller {
 
           stmt.executeUpdate();
           userFieldsToList();
-          addToLog(newProduct, count);
-          count++;
+
+          switch (newProduct.type.code()) {
+            case "AU":
+              addToLog(newProduct, countAU);
+              countAU++;
+              break;
+            case "VI":
+              addToLog(newProduct, countVI);
+              countVI++;
+              break;
+            case "AM":
+              addToLog(newProduct, countAM);
+              countAM++;
+              break;
+            case "VM":
+              addToLog(newProduct, countVM);
+              countVM++;
+              break;
+          }
+
           nameText.clear();
           manufacturerText.clear();
+          choiceBox.getSelectionModel().clearSelection();
         }
 
       } catch (NullPointerException e) {
@@ -169,8 +193,6 @@ public class Controller {
         se.printStackTrace();
       }//end finally try
     }
-
-
   }
 
   /**
@@ -231,7 +253,6 @@ public class Controller {
                 ItemType.valueOf((rs.getString("type")))));
       }
 
-
       // STEP 4: Clean-up environment
 
       stmt.close();
@@ -286,7 +307,7 @@ public class Controller {
 
         productLine.add(
             new Widget(rs.getString("name"), rs.getString("manufacturer"),
-                 choiceBox.getValue()));
+                choiceBox.getValue()));
 
       }
 
@@ -304,11 +325,11 @@ public class Controller {
     }
   }
 
-  public void addToLog(Product product, int count){
+  public void addToLog(Product product, int count) {
     productRecord.setText("");
     ProductionRecord recordLog = new ProductionRecord(product, count);
     logs.add(recordLog.toString());
-    for(String a : logs){
+    for (String a : logs) {
       productRecord.appendText(a + "\n");
     }
   }

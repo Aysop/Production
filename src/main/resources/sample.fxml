@@ -58,9 +58,10 @@ file: sample.fxml
                 <Button layoutX="613.0" layoutY="224.0" mnemonicParsing="false" onMouseClicked="#addProduct" prefHeight="25.0" prefWidth="127.0" stylesheets="@styling.css" text="Add Product" />
                 <TableView fx:id="productList" layoutX="27.0" layoutY="267.0" prefHeight="316.0" prefWidth="713.0">
                   <columns>
-                    <TableColumn fx:id="nameCol" prefWidth="168.0" text="Product Name" />
-                    <TableColumn fx:id="manufacturerCol" prefWidth="131.0" text="Manufacturer" />
-                    <TableColumn fx:id="typeCol" prefWidth="178.0" text="Item Type" />
+                    <TableColumn fx:id="idCol" prefWidth="108.0" text="ProductID" />
+                    <TableColumn fx:id="nameCol" prefWidth="199.0" text="Product Name" />
+                    <TableColumn fx:id="manufacturerCol" prefWidth="146.0" text="Manufacturer" />
+                    <TableColumn fx:id="typeCol" prefWidth="176.0" text="Item Type" />
                   </columns>
                 </TableView>
                 <Label layoutX="35.0" layoutY="242.0" text="Existing Products" />
