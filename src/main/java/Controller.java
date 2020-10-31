@@ -62,10 +62,12 @@ public class Controller {
   public Label successLabel;
 
   // Class fields
-  private static int count = 0;
-  private final ArrayList<String> productionLogs = new ArrayList<>();
-  private final ObservableList<String> productList = FXCollections.observableArrayList();
-  private final ObservableList<Product> productLine = FXCollections.observableArrayList();
+  private static int count = 0; // Total products created
+  private final ArrayList<String> productionLogs = new ArrayList<>(); // Holds production logs for TextArea
+  private final ObservableList<String> productList = FXCollections
+      .observableArrayList(); // Holds products toString() info for ListView
+  private final ObservableList<Product> productLine = FXCollections
+      .observableArrayList(); // Holds product info for TableView
 
 
   /**
@@ -114,7 +116,7 @@ public class Controller {
    */
 
   public void populateChoiceBox() {
-
+    // populates choice box
     for (ItemType item : ItemType.values()) {
       choiceBox.getItems().add(item);
     }
@@ -126,7 +128,7 @@ public class Controller {
    */
 
   public void populateCmbBox() {
-    //populates combo boxes at start
+    // populates combo boxes
     for (int i = 1; i <= 10; i++) {
       cmbBox.setEditable(true);
       cmbBox.getItems().add(Integer.toString(i));
@@ -355,7 +357,7 @@ public class Controller {
   }
 
   /**
-   * Adds newly made product to Production Log
+   * Adds newly made products to Production Log
    *
    * @param product The newly made product
    * @param count   The product's manufacturer

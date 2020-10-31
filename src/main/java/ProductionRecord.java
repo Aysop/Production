@@ -105,9 +105,21 @@ public class ProductionRecord {
    */
 
   ProductionRecord(Product product, int count) {
+    String manufacturer = "";
+    String serialID = "";
+    String placeholder = "";
 
-    String serialID =
-        product.manufacturer.substring(0, 3) + product.type.code() + determineSerialNumber(product);
+    if (product.manufacturer.length() < 3) {
+
+      for (int i = 0; i < 3 - (product.manufacturer.length()); i++) {
+        placeholder += "@";
+      }
+      manufacturer = product.manufacturer;
+      serialID = placeholder + manufacturer + product.type.code() + determineSerialNumber(product);
+    } else {
+      manufacturer = product.manufacturer.substring(0, 3);
+      serialID = manufacturer + product.type.code() + determineSerialNumber(product);
+    }
 
     this.productionNumber = count;
     productID = product.name;

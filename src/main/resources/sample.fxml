@@ -43,9 +43,9 @@ file: sample.fxml
                     <RowConstraints maxHeight="67.0" minHeight="10.0" prefHeight="67.0" vgrow="SOMETIMES" />
                   </rowConstraints>
                   <children>
-                    <Label prefWidth="108.0" text="Product Name" />
-                    <Label text="Manufacturer " GridPane.rowIndex="1" />
-                    <Label text="Item Type" GridPane.rowIndex="2" />
+                    <Label prefHeight="18.0" prefWidth="119.0" text="Product Name:" />
+                    <Label text="Manufacturer: " GridPane.rowIndex="1" />
+                    <Label text="Item Type:" GridPane.rowIndex="2" />
                     <TextField fx:id="nameText" GridPane.columnIndex="1" />
                     <TextField fx:id="manufacturerText" prefWidth="177.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                     <ChoiceBox fx:id="choiceBox" prefHeight="25.0" prefWidth="337.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -64,7 +64,7 @@ file: sample.fxml
                     <TableColumn fx:id="typeCol" prefWidth="173.0" text="Item Type" />
                   </columns>
                 </TableView>
-                <Label layoutX="35.0" layoutY="242.0" text="Existing Products" />
+                <Label layoutX="35.0" layoutY="242.0" text="Existing Products:" />
                 <Label fx:id="errorLabel" layoutX="355.0" layoutY="229.0" prefHeight="17.0" prefWidth="249.0" styleClass="error_text" />
                         <Label fx:id="successLabel" layoutX="355.0" layoutY="229.0" prefHeight="17.0" prefWidth="249.0" styleClass="success_text" />
               </children>
@@ -75,8 +75,8 @@ file: sample.fxml
           <content>
             <AnchorPane prefHeight="200.0" prefWidth="648.0">
               <children>
-                <Label layoutX="568.0" layoutY="79.0" text="Choose Quantity" />
-                <Label layoutX="50.0" layoutY="46.0" text="Choose Product" />
+                <Label layoutX="568.0" layoutY="79.0" text="Enter Quantity:" />
+                <Label layoutX="50.0" layoutY="46.0" text="Choose Product:" />
                 <ListView fx:id="productSelection" layoutX="50.0" layoutY="79.0" prefHeight="447.0" prefWidth="444.0" />
                 <ComboBox fx:id="cmbBox" layoutX="548.0" layoutY="107.0" prefHeight="28.0" prefWidth="168.0" />
                 <Button layoutX="544.0" layoutY="481.0" mnemonicParsing="false" onMouseClicked="#recordProduction" prefHeight="28.0" prefWidth="172.0" text="Record Production" />
