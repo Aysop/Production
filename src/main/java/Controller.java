@@ -332,13 +332,11 @@ public class Controller {
         String name = rs.getString("name");
         String manufacturer = rs.getString("manufacturer");
         ItemType type = ItemType.valueOf(rs.getString("type"));
+        Widget newWidget = new Widget(id, name, manufacturer, type);
 
-        productLine.add(
-            new Widget(id, name, manufacturer, type));
-        productList.add(
-            new Widget(id, name, manufacturer, type).toString());
-        productSelection.getItems()
-            .add(new Widget(id, name, manufacturer, type));
+        productLine.add(newWidget);
+        productList.add(newWidget.toString());
+        productSelection.getItems().add(newWidget);
 
       }
 
