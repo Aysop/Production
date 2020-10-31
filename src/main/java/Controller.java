@@ -29,24 +29,40 @@ import java.sql.Statement;
 
 public class Controller {
 
+  // FXML Class Fields
   @FXML
   public ChoiceBox<ItemType> choiceBox;
+  @FXML
   public ComboBox<String> cmbBox;
+  @FXML
   public Label errorLabel;
+  @FXML
   public ListView<Product> productSelection;
+  @FXML
   public TableView<Product> productView;
+  @FXML
   public TableColumn<Product, Integer> idCol;
+  @FXML
   public TableColumn<Product, ItemType> typeCol;
+  @FXML
   public TableColumn<Product, String> nameCol;
+  @FXML
   public TableColumn<Product, String> manufacturerCol;
+  @FXML
   public TextField nameText;
+  @FXML
   public TextField manufacturerText;
+  @FXML
   public TextArea productRecord;
+  @FXML
   public Label errorLabel2;
+  @FXML
   public Label successLabel2;
+  @FXML
   public Label successLabel;
-  private static int count = 1;
 
+  // Class fields
+  private static int count = 0;
   private final ArrayList<String> productionLogs = new ArrayList<>();
   private final ObservableList<String> productList = FXCollections.observableArrayList();
   private final ObservableList<Product> productLine = FXCollections.observableArrayList();
@@ -55,6 +71,7 @@ public class Controller {
   /**
    * Handles button actions on Product Line tab
    */
+
   public void addProduct(MouseEvent mouseEvent) {
     addToDB();
   }
@@ -62,133 +79,27 @@ public class Controller {
   /**
    * Handles button actions on Produce tab
    */
+
   public void recordProduction(MouseEvent mouseEvent) {
     createItem();
   }
 
   /**
-   * Runs whatever functions placed into it at program start
+   * Functions in it run at start
    */
+
   public void initialize() {
     listDB();
+    populateChoiceBox();
+    populateCmbBox();
     populateDB();
-    choiceBoxFill();
-    cmbBoxFill();
   }
 
-  /**
-   * populates choice box on Product Line tab
-   */
-  public void choiceBoxFill() {
-
-    for (ItemType item : ItemType.values()) {
-      choiceBox.getItems().add(item);
-    }
-
-  }
-
-  public void cmbBoxFill() {
-    //populates combo boxes at start
-    for (int i = 1; i <= 10; i++) {
-      cmbBox.setEditable(true);
-      cmbBox.getItems().add(Integer.toString(i));
-      cmbBox.getSelectionModel().selectFirst();
-    }
-  }
-
-
-  /**
-   * inserts user entries to database
-   */
-  public void addToDB() {
-
-    final String JDBC_DRIVER = "org.h2.Driver";
-
-    final String DB_URL = "jdbc:h2:./res/productionDB";
-
-    //  Database credentials
-
-    final String USER = "";
-
-    final String PASS = ""; // SpotBug finds "Security" issue, no password
-
-    Connection conn = null;
-
-    PreparedStatement stmt = null;
-
-    try {
-
-      // STEP 1: Register JDBC driver
-
-      Class.forName(JDBC_DRIVER);
-      //SpotBugs finds "Bad Practice" here, method may fail to close db resource
-      //STEP 2: Open a connection
-
-      conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-      //STEP 3: Execute a query
-      /**
-       * Catches null exceptions for Product Line choice box
-       */
-      try {
-        String prodName = nameText.getText();
-        String prodManufacturer = manufacturerText.getText();
-        ItemType prodType = choiceBox.getValue();
-
-        String sql = " INSERT INTO Product(type, manufacturer, name) VALUES ( ?, ?, ?)";
-
-        if (prodName.equals("") || prodManufacturer.equals("")) {
-          errorLabel.setText("Please fill in all the forms");
-        } else {
-          stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-          stmt.setString(1, prodType.toString());
-          stmt.setString(2, prodManufacturer);
-          stmt.setString(3, prodName);
-
-          int prodId = stmt.executeUpdate();
-
-          Widget newProduct = new Widget(prodId, prodName, prodManufacturer, prodType);
-          addToLog(newProduct, count);
-          count++;
-
-          userFieldsToLists();
-
-          successLabel.setText("Added Successfully.");
-          nameText.clear();
-          manufacturerText.clear();
-          choiceBox.getSelectionModel().clearSelection();
-        }
-
-      } catch (NullPointerException e) {
-        errorLabel.setText("Please select a product type.");
-      }
-
-
-    } catch (Exception se) {
-      //Handle errors for JDBC
-      se.printStackTrace();
-    }//Handle errors for Class.forName
-    finally {
-      //finally block used to close resources
-      try {
-        if (stmt != null) {
-          conn.close();
-        }
-      } catch (SQLException ignored) {
-      }// do nothing
-      try {
-        if (conn != null) {
-          conn.close();
-        }
-      } catch (SQLException se) {
-        se.printStackTrace();
-      }//end finally try
-    }
-  }
 
   /**
    * Assigns value types for the database's table columns
    */
+
   public void listDB() {
     idCol.setCellValueFactory(new PropertyValueFactory<Product, Integer>("id"));
     nameCol.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
@@ -199,8 +110,35 @@ public class Controller {
   }
 
   /**
+   * populates choice box on Product Line tab
+   */
+
+  public void populateChoiceBox() {
+
+    for (ItemType item : ItemType.values()) {
+      choiceBox.getItems().add(item);
+    }
+
+  }
+
+  /**
+   * Populates combo box with numberical choices 1-10
+   */
+
+  public void populateCmbBox() {
+    //populates combo boxes at start
+    for (int i = 1; i <= 10; i++) {
+      cmbBox.setEditable(true);
+      cmbBox.getItems().add(Integer.toString(i));
+      cmbBox.getSelectionModel().selectFirst();
+    }
+  }
+
+
+  /**
    * Populates database list
    */
+
   public void populateDB() {  // SpotBugs finds "Experimental", may fail to clean up rs checked exception
 
     final String JDBC_DRIVER = "org.h2.Driver";
@@ -237,19 +175,15 @@ public class Controller {
 
       while (rs.next()) {
 
-        productLine.add(
-            new Widget(Integer.parseInt(rs.getString("id")), rs.getString("name"),
-                rs.getString("manufacturer"),
-                ItemType.valueOf(rs.getString("type"))));
-        productList.add(
-            new Widget(Integer.parseInt(rs.getString("id")), rs.getString("name"),
-                rs.getString("manufacturer"),
-                ItemType.valueOf(rs.getString("type"))).toString());
+        int id = Integer.parseInt(rs.getString("id"));
+        String name = rs.getString("name");
+        String manufacturer = rs.getString("manufacturer");
+        ItemType type = ItemType.valueOf(rs.getString("type"));
+        Widget widget = new Widget(id, name, manufacturer, type);
 
-        productSelection.getItems()
-            .add(new Widget(Integer.parseInt(rs.getString("id")), rs.getString("name"),
-                rs.getString("manufacturer"),
-                ItemType.valueOf(rs.getString("type"))));
+        productLine.add(widget);
+        productList.add(widget.toString());
+        productSelection.getItems().add(widget);
 
       }
 
@@ -268,9 +202,96 @@ public class Controller {
   }
 
   /**
+   * inserts user entries to database
+   */
+
+  public void addToDB() {
+    successLabel.setText("");
+    errorLabel.setText("");
+
+    final String JDBC_DRIVER = "org.h2.Driver";
+
+    final String DB_URL = "jdbc:h2:./res/productionDB";
+
+    //  Database credentials
+
+    final String USER = "";
+
+    final String PASS = ""; // SpotBug finds "Security" issue, no password
+
+    Connection conn = null;
+
+    PreparedStatement stmt = null;
+
+    try {
+
+      // STEP 1: Register JDBC driver
+
+      Class.forName(JDBC_DRIVER);
+      //SpotBugs finds "Bad Practice" here, method may fail to close db resource
+      //STEP 2: Open a connection
+
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+      //STEP 3: Execute a query
+
+      try {//Catches null exceptions for Product Line choice box
+        String prodName = nameText.getText();
+        String prodManufacturer = manufacturerText.getText();
+        ItemType prodType = choiceBox.getValue();
+
+        String sql = " INSERT INTO Product(type, manufacturer, name) VALUES ( ?, ?, ?)";
+
+        if (prodName.equals("") || prodManufacturer.equals("")) {
+          errorLabel.setText("Please fill in all the forms");
+        } else {
+          stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+          stmt.setString(1, prodType.toString());
+          stmt.setString(2, prodManufacturer);
+          stmt.setString(3, prodName);
+
+          stmt.executeUpdate();
+
+          updateLists();
+
+          successLabel.setText("Added Successfully.");
+          nameText.clear();
+          manufacturerText.clear();
+          choiceBox.getSelectionModel().clearSelection();
+        }
+
+      } catch (NullPointerException e) {
+
+        errorLabel.setText("Please select a product type.");
+      }
+    } catch (Exception se) {
+      //Handle errors for JDBC
+      se.printStackTrace();
+    }//Handle errors for Class.forName
+    finally {
+      //finally block used to close resources
+      try {
+        if (stmt != null) {
+          conn.close();
+        }
+      } catch (SQLException ignored) {
+      }// do nothing
+      try {
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (SQLException se) {
+        se.printStackTrace();
+      }//end finally try
+    }
+  }
+
+
+  /**
    * Adds users entries to GUI database list
    */
-  public void userFieldsToLists() { // SpotBugs finds "Experimental" here, may fail to clean up rs checked exception
+
+  public void updateLists() { // SpotBugs finds "Experimental" here, may fail to clean up rs checked exception
     final String JDBC_DRIVER = "org.h2.Driver";
 
     final String DB_URL = "jdbc:h2:./res/productionDB";
@@ -305,19 +326,18 @@ public class Controller {
 
       while (rs.next()) {
 
+        int id = Integer.parseInt(rs.getString("id"));
+        String name = rs.getString("name");
+        String manufacturer = rs.getString("manufacturer");
+        ItemType type = ItemType.valueOf(rs.getString("type"));
+
         productLine.add(
-            new Widget(Integer.parseInt(rs.getString("id")), rs.getString("name"),
-                rs.getString("manufacturer"),
-                choiceBox.getValue()));
-
-        productList.add(new Widget(Integer.parseInt(rs.getString("id")), rs.getString("name"),
-            rs.getString("manufacturer"),
-            choiceBox.getValue()).toString());
-
+            new Widget(id, name, manufacturer, type));
+        productList.add(
+            new Widget(id, name, manufacturer, type).toString());
         productSelection.getItems()
-            .add(new Widget(Integer.parseInt(rs.getString("id")), rs.getString("name"),
-                rs.getString("manufacturer"),
-                ItemType.valueOf((rs.getString("type")))));
+            .add(new Widget(id, name, manufacturer, type));
+
       }
 
       // STEP 4: Clean-up environment
@@ -334,6 +354,13 @@ public class Controller {
     }
   }
 
+  /**
+   * Adds newly made product to Production Log
+   *
+   * @param product The newly made product
+   * @param count   The product's manufacturer
+   */
+
   public void addToLog(Product product, int count) {
     productRecord.setText("");
     ProductionRecord recordLog = new ProductionRecord(product, count);
@@ -343,17 +370,21 @@ public class Controller {
     }
   }
 
+  /**
+   * Creates new product in the "Produce" tab
+   */
 
   public void createItem() {
     errorLabel2.setText("");
+    successLabel2.setText("");
 
     try {
       Product product = productSelection.getSelectionModel().getSelectedItem();
       int tally = Integer.parseInt(cmbBox.getValue());
 
       for (int i = 0; i < tally; i++) {
-        addToLog(product, count);
         count++;
+        addToLog(product, count);
       }
 
       successLabel2.setText("Added Successfully.");
@@ -362,6 +393,7 @@ public class Controller {
     }
 
   }
+
 
 }
 

@@ -26,7 +26,7 @@ file: sample.fxml
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="637.0" prefWidth="761.0" stylesheets="@styling.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
   <children>
-    <TabPane id="AnchorPane" layoutY="6.0" prefHeight="637.0" prefWidth="761.0" tabClosingPolicy="UNAVAILABLE">
+    <TabPane id="AnchorPane" prefHeight="637.0" prefWidth="761.0" tabClosingPolicy="UNAVAILABLE">
       <tabs>
         <Tab text="Product Line">
           <content>
@@ -75,10 +75,10 @@ file: sample.fxml
           <content>
             <AnchorPane prefHeight="200.0" prefWidth="648.0">
               <children>
-                <Label layoutX="568.0" layoutY="55.0" text="Choose Quantity" />
+                <Label layoutX="568.0" layoutY="79.0" text="Choose Quantity" />
                 <Label layoutX="50.0" layoutY="46.0" text="Choose Product" />
                 <ListView fx:id="productSelection" layoutX="50.0" layoutY="79.0" prefHeight="447.0" prefWidth="444.0" />
-                <ComboBox fx:id="cmbBox" layoutX="546.0" layoutY="137.0" prefHeight="28.0" prefWidth="168.0" />
+                <ComboBox fx:id="cmbBox" layoutX="548.0" layoutY="107.0" prefHeight="28.0" prefWidth="168.0" />
                 <Button layoutX="544.0" layoutY="481.0" mnemonicParsing="false" onMouseClicked="#recordProduction" prefHeight="28.0" prefWidth="172.0" text="Record Production" />
                         <Label fx:id="errorLabel2" layoutX="540.0" layoutY="429.0" prefHeight="18.0" prefWidth="181.0" styleClass="error_text" />
                         <Label fx:id="successLabel2" layoutX="551.0" layoutY="429.0" prefHeight="18.0" prefWidth="160.0" styleClass="success_text" />

@@ -1,3 +1,10 @@
+/*---------------------------------------------------------
+file: ItemType.java
+  by: Joseph Morelli
+ org: COP 3003, Fall 2020
+ for: Enum declaration for Item types.
+---------------------------------------------------------*/
+
 public enum ItemType {
   AUDIO("AU"),
   VISUAL("VI"),
