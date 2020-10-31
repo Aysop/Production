@@ -109,10 +109,10 @@ public class ProductionRecord {
     String serialID = "";
     String placeholder = "";
 
-    if (product.manufacturer.length() < 3) {
+    if (product.manufacturer.length() < 3) { // checks manufacturer name length
 
       for (int i = 0; i < 3 - (product.manufacturer.length()); i++) {
-        placeholder += "@";
+        placeholder += "@"; // appends placeholders for names less than req.
       }
       manufacturer = product.manufacturer;
       serialID = placeholder + manufacturer + product.type.code() + determineSerialNumber(product);
