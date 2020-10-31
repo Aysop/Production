@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -29,25 +30,26 @@ import java.sql.Statement;
 public class Controller {
 
   @FXML
-  public TableView<Product> productList;
+  public ChoiceBox<ItemType> choiceBox;
+  public ComboBox<String> cmbBox;
+  public Label errorLabel;
+  public ListView<Product> productSelection;
+  public TableView<Product> productView;
+  public TableColumn<Product, Integer> idCol;
   public TableColumn<Product, ItemType> typeCol;
   public TableColumn<Product, String> nameCol;
   public TableColumn<Product, String> manufacturerCol;
-  public ChoiceBox<ItemType> choiceBox;
   public TextField nameText;
   public TextField manufacturerText;
-  public ComboBox<String> cmbBox;
-  public Label errorLabel;
   public TextArea productRecord;
-  public TableColumn idCol;
+  public Label errorLabel2;
+  public Label successLabel2;
+  public Label successLabel;
+  private static int count = 1;
 
-  ArrayList<String> logs = new ArrayList<>();
-  int countAU = 0;
-  int countVI = 0;
-  int countAM = 0;
-  int countVM = 0;
-
-  ObservableList<Product> productLine = FXCollections.observableArrayList();
+  private final ArrayList<String> productionLogs = new ArrayList<>();
+  private final ObservableList<String> productList = FXCollections.observableArrayList();
+  private final ObservableList<Product> productLine = FXCollections.observableArrayList();
 
 
   /**
@@ -61,7 +63,7 @@ public class Controller {
    * Handles button actions on Produce tab
    */
   public void recordProduction(MouseEvent mouseEvent) {
-    System.out.println("...but the second mouse gets the cheese.");
+    createItem();
   }
 
   /**
@@ -70,8 +72,22 @@ public class Controller {
   public void initialize() {
     listDB();
     populateDB();
-    choiceBoxSelect();
+    choiceBoxFill();
+    cmbBoxFill();
+  }
 
+  /**
+   * populates choice box on Product Line tab
+   */
+  public void choiceBoxFill() {
+
+    for (ItemType item : ItemType.values()) {
+      choiceBox.getItems().add(item);
+    }
+
+  }
+
+  public void cmbBoxFill() {
     //populates combo boxes at start
     for (int i = 1; i <= 10; i++) {
       cmbBox.setEditable(true);
@@ -80,18 +96,6 @@ public class Controller {
     }
   }
 
-  /**
-   * populates choice box on Product Line tab
-   */
-  public void choiceBoxSelect() {
-
-    for (ItemType item : ItemType.values()) {
-
-      choiceBox.getItems().add(item);
-    }
-
-
-  }
 
   /**
    * inserts user entries to database
@@ -131,38 +135,25 @@ public class Controller {
         String prodManufacturer = manufacturerText.getText();
         ItemType prodType = choiceBox.getValue();
 
-        String sql = " INSERT INTO Product(type, manufacturer, name) VALUES ( ?, ?, ? )";
+        String sql = " INSERT INTO Product(type, manufacturer, name) VALUES ( ?, ?, ?)";
+
         if (prodName.equals("") || prodManufacturer.equals("")) {
-          errorLabel.setText("Please fill in all forms");
+          errorLabel.setText("Please fill in all the forms");
         } else {
-          stmt = conn.prepareStatement(sql);
+          stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
           stmt.setString(1, prodType.toString());
           stmt.setString(2, prodManufacturer);
           stmt.setString(3, prodName);
-          Widget newProduct = new Widget(prodName, prodManufacturer, prodType);
 
-          stmt.executeUpdate();
-          userFieldsToList();
+          int prodId = stmt.executeUpdate();
 
-          switch (newProduct.type.code()) {
-            case "AU":
-              addToLog(newProduct, countAU);
-              countAU++;
-              break;
-            case "VI":
-              addToLog(newProduct, countVI);
-              countVI++;
-              break;
-            case "AM":
-              addToLog(newProduct, countAM);
-              countAM++;
-              break;
-            case "VM":
-              addToLog(newProduct, countVM);
-              countVM++;
-              break;
-          }
+          Widget newProduct = new Widget(prodId, prodName, prodManufacturer, prodType);
+          addToLog(newProduct, count);
+          count++;
 
+          userFieldsToLists();
+
+          successLabel.setText("Added Successfully.");
           nameText.clear();
           manufacturerText.clear();
           choiceBox.getSelectionModel().clearSelection();
@@ -196,17 +187,15 @@ public class Controller {
   }
 
   /**
-   * Assigns value types for the database's table columns Used https://www.youtube.com/watch?v=LoiQVoNil9Q&t=5s
-   * as ref
+   * Assigns value types for the database's table columns
    */
   public void listDB() {
-
+    idCol.setCellValueFactory(new PropertyValueFactory<Product, Integer>("id"));
     nameCol.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
     manufacturerCol.setCellValueFactory(new PropertyValueFactory<Product, String>("manufacturer"));
     typeCol.setCellValueFactory(new PropertyValueFactory<Product, ItemType>("type"));
 
-    productList.setItems(productLine);
-
+    productView.setItems(productLine);
   }
 
   /**
@@ -249,8 +238,19 @@ public class Controller {
       while (rs.next()) {
 
         productLine.add(
-            new Widget(rs.getString("name"), rs.getString("manufacturer"),
-                ItemType.valueOf((rs.getString("type")))));
+            new Widget(Integer.parseInt(rs.getString("id")), rs.getString("name"),
+                rs.getString("manufacturer"),
+                ItemType.valueOf(rs.getString("type"))));
+        productList.add(
+            new Widget(Integer.parseInt(rs.getString("id")), rs.getString("name"),
+                rs.getString("manufacturer"),
+                ItemType.valueOf(rs.getString("type"))).toString());
+
+        productSelection.getItems()
+            .add(new Widget(Integer.parseInt(rs.getString("id")), rs.getString("name"),
+                rs.getString("manufacturer"),
+                ItemType.valueOf(rs.getString("type"))));
+
       }
 
       // STEP 4: Clean-up environment
@@ -270,7 +270,7 @@ public class Controller {
   /**
    * Adds users entries to GUI database list
    */
-  public void userFieldsToList() { // SpotBugs finds "Experimental" here, may fail to clean up rs checked exception
+  public void userFieldsToLists() { // SpotBugs finds "Experimental" here, may fail to clean up rs checked exception
     final String JDBC_DRIVER = "org.h2.Driver";
 
     final String DB_URL = "jdbc:h2:./res/productionDB";
@@ -306,9 +306,18 @@ public class Controller {
       while (rs.next()) {
 
         productLine.add(
-            new Widget(rs.getString("name"), rs.getString("manufacturer"),
+            new Widget(Integer.parseInt(rs.getString("id")), rs.getString("name"),
+                rs.getString("manufacturer"),
                 choiceBox.getValue()));
 
+        productList.add(new Widget(Integer.parseInt(rs.getString("id")), rs.getString("name"),
+            rs.getString("manufacturer"),
+            choiceBox.getValue()).toString());
+
+        productSelection.getItems()
+            .add(new Widget(Integer.parseInt(rs.getString("id")), rs.getString("name"),
+                rs.getString("manufacturer"),
+                ItemType.valueOf((rs.getString("type")))));
       }
 
       // STEP 4: Clean-up environment
@@ -328,16 +337,33 @@ public class Controller {
   public void addToLog(Product product, int count) {
     productRecord.setText("");
     ProductionRecord recordLog = new ProductionRecord(product, count);
-    logs.add(recordLog.toString());
-    for (String a : logs) {
+    productionLogs.add(recordLog.toString());
+    for (String a : productionLogs) {
       productRecord.appendText(a + "\n");
     }
   }
 
 
+  public void createItem() {
+    errorLabel2.setText("");
+
+    try {
+      Product product = productSelection.getSelectionModel().getSelectedItem();
+      int tally = Integer.parseInt(cmbBox.getValue());
+
+      for (int i = 0; i < tally; i++) {
+        addToLog(product, count);
+        count++;
+      }
+
+      successLabel2.setText("Added Successfully.");
+    } catch (NullPointerException e) {
+      errorLabel2.setText("Please select a product.");
+    }
+
+  }
+
 }
-
-
 
 
 

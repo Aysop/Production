@@ -5,14 +5,12 @@ file: <<styling.css>>
  for: Creates styling for login scene
 ---------------------------------------------------------*/
 
-#AnchorPane {
-  background-color: white;
-}
+
 
 .root {
+  -fx-background-color: white;
   -fx-font-family: "Sitka Subheading";
-  -fx-text-fill: white;
-  -fx-font-size: 14px;
+  -fx-font-size: 15px;
 }
 
 .button {
@@ -22,4 +20,8 @@ file: <<styling.css>>
 
 .error_text {
   -fx-text-fill: orangered;
+}
+
+.success_text {
+  -fx-text-fill: green;
 }

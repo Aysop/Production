@@ -8,6 +8,18 @@ file: Product.java
 
 public abstract class Product implements Item{
 
+
+  public int getId() {
+    return id;
+  }
+
+  // variable declarations
+  int id;
+  String name;
+  String manufacturer;
+  ItemType type;
+
+
 /**
  * Product get
  *
@@ -47,12 +59,6 @@ public void setManufacturer(String manufacturer){
     this.manufacturer=manufacturer;
     }
 
-    // variable declarations
-    int id;
-    String name;
-    String manufacturer;
-    ItemType type;
-
   public ItemType getType() {
     return type;
   }
@@ -71,7 +77,7 @@ public void setManufacturer(String manufacturer){
  * @param type         The product's type
  */
 
-public Product(String name,String manufacturer,ItemType type){
+public Product(int id, String name,String manufacturer,ItemType type){
     this.id = id;
     this.name=name;
     this.manufacturer=manufacturer;
@@ -95,8 +101,8 @@ class Widget extends Product {
    * @param manufacturer The product's manufacturer
    * @param type         The product's type
    */
-  public Widget(String name, String manufacturer, ItemType type)  {
-    super(name, manufacturer, type);
+  public Widget(int id, String name, String manufacturer, ItemType type)  {
+    super(id, name, manufacturer, type);
   }
 
 
