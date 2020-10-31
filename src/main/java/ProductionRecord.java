@@ -105,25 +105,9 @@ public class ProductionRecord {
    */
 
   ProductionRecord(Product product, int count) {
-    String manufacturer = "";
-    String serialID = "";
-    String placeholder = "";
-
-    if (product.manufacturer.length() < 3) { // checks manufacturer name length
-
-      for (int i = 0; i < 3 - (product.manufacturer.length()); i++) {
-        placeholder += "@"; // appends placeholders for names less than req.
-      }
-      manufacturer = product.manufacturer;
-      serialID = placeholder + manufacturer + product.type.code() + determineSerialNumber(product);
-    } else {
-      manufacturer = product.manufacturer.substring(0, 3);
-      serialID = manufacturer + product.type.code() + determineSerialNumber(product);
-    }
-
     this.productionNumber = count;
     productID = product.name;
-    serialNumber = serialID;
+    serialNumber = determineSerialNumber(product);
     dateProduced = new Date();
 
   }
@@ -162,6 +146,9 @@ public class ProductionRecord {
 
   public String determineSerialNumber(Product product) {
     String format = "";
+    String manufacturer = "";
+    String serialID = "";
+    String placeholder = "";
 
     switch (product.type.code()) {
       case "AU":
@@ -181,7 +168,18 @@ public class ProductionRecord {
         countVM++;
         break;
     }
-    return format;
+
+    if (product.manufacturer.length() < 3) { // checks manufacturer name length
+      for (int i = 0; i < 3 - (product.manufacturer.length()); i++) {
+        placeholder += "@"; // appends placeholders for names less than req.
+      }
+      manufacturer = product.manufacturer;
+      serialID = placeholder + manufacturer + product.type.code() + format;
+    } else {
+      manufacturer = product.manufacturer.substring(0, 3);
+      serialID = manufacturer + product.type.code() + format;
+    }
+    return serialID;
   }
 
 
