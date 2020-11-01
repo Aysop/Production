@@ -380,15 +380,19 @@ public class Controller {
 
     try {
       Product product = productSelection.getSelectionModel().getSelectedItem();
-      int tally = Integer.parseInt(cmbBox.getValue());
 
-      for (int i = 0; i < tally; i++) {
-        count++;
-        addToLog(product, count);
+      try {
+        int tally = Integer.parseInt(cmbBox.getValue());
+        for (int i = 0; i < tally; i++) {
+          count++;
+          addToLog(product, count);
+          successLabel2.setText("Added Successfully.");
+        }
+      } catch (RuntimeException e) {
+        errorLabel2.setText("Please enter a #.");
       }
-
-      successLabel2.setText("Added Successfully.");
-    } catch (NullPointerException e) {
+    } catch (
+        NullPointerException e) {
       errorLabel2.setText("Please select a product.");
     }
 
