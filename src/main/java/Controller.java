@@ -378,10 +378,10 @@ public class Controller {
     errorLabel2.setText("");
     successLabel2.setText("");
 
-    try {
+    try { // Catches NullPointer exceptions
       Product product = productSelection.getSelectionModel().getSelectedItem();
 
-      try {
+      try { // Catches Runtime exceptions
         int tally = Integer.parseInt(cmbBox.getValue());
         for (int i = 0; i < tally; i++) {
           count++;
