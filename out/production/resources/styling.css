@@ -1,0 +1,27 @@
+/*---------------------------------------------------------
+file: <<styling.css>>
+  by: Joseph Morelli
+ org: COP 3003, Fall 2020
+ for: Creates styling for login scene
+---------------------------------------------------------*/
+
+
+
+.root {
+  -fx-background-color: white;
+  -fx-font-family: "Sitka Subheading";
+  -fx-font-size: 15px;
+}
+
+.button {
+  -fx-background-color: orangered;
+  -fx-text-fill: white;
+}
+
+.error_text {
+  -fx-text-fill: orangered;
+}
+
+.success_text {
+  -fx-text-fill: green;
+}

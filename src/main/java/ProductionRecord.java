@@ -10,8 +10,9 @@ import java.util.Date;
 public class ProductionRecord {
 
   // Class fields
+  private String productName;
   private int productionNumber;
-  private String productID;
+  private int productID;
   private String serialNumber;
   private Date dateProduced;
 
@@ -47,7 +48,7 @@ public class ProductionRecord {
    * @return productID
    */
 
-  public String getProductID() {
+  public int getProductID() {
     return productID;
   }
 
@@ -57,7 +58,7 @@ public class ProductionRecord {
    * @param productID product's id
    */
 
-  public void setProductID(String productID) {
+  public void setProductID(int productID) {
     this.productID = productID;
   }
 
@@ -105,8 +106,9 @@ public class ProductionRecord {
    */
 
   ProductionRecord(Product product, int count) {
+    this.productName = product.name;
     this.productionNumber = count;
-    productID = product.name;
+    productID = product.id;
     serialNumber = determineSerialNumber(product);
     dateProduced = new Date();
 
@@ -121,7 +123,7 @@ public class ProductionRecord {
    * @param dateProduced     The product's production date
    */
 
-  ProductionRecord(int productionNumber, String productID, String serialNumber, Date dateProduced) {
+  ProductionRecord(int productionNumber, int productID, String serialNumber, Date dateProduced) {
     this.productionNumber = productionNumber;
     this.productID = productID;
     this.serialNumber = serialNumber;
@@ -134,7 +136,8 @@ public class ProductionRecord {
 
   @Override
   public String toString() {
-    return "Prod. Num: " + productionNumber + " Product ID: " + productID + " Serial Num: "
+
+    return "Prod. Num: " + productionNumber + " Product ID: " + productName + " Serial Num: "
         + serialNumber + " Date: " + dateProduced;
   }
 

@@ -6,10 +6,13 @@ file: Controller.java
       functionality.
 ---------------------------------------------------------*/
 
+
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
+import java.util.Date;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -62,12 +65,15 @@ public class Controller {
   public Label successLabel;
 
   // Class fields
-  private static int count = 0; // Total products created
-  private final ArrayList<String> productionLogs = new ArrayList<>(); // Holds production logs for TextArea
+  private final ArrayList<ProductionRecord> productionLogs = new ArrayList<ProductionRecord>(); // Holds production logs for TextArea
+  private final ArrayList<Product> products = new ArrayList<Product>();
   private final ObservableList<String> productList = FXCollections
       .observableArrayList(); // Holds products toString() info for ListView
   private final ObservableList<Product> productLine = FXCollections
       .observableArrayList(); // Holds product info for TableView
+  public Button newEmp;
+  public TextField newEmpName;
+  public TextField newEmpPW;
 
 
   /**
@@ -95,6 +101,7 @@ public class Controller {
     populateChoiceBox();
     populateCmbBox();
     populateDB();
+    populateLog();
   }
 
 
@@ -124,7 +131,7 @@ public class Controller {
   }
 
   /**
-   * Populates combo box with numberical choices 1-10
+   * Populates combo box with numerical choices 1-10
    */
 
   public void populateCmbBox() {
@@ -187,6 +194,7 @@ public class Controller {
         productList.add(widget.toString());
         productSelection.getItems().add(widget);
 
+        products.add(widget);
       }
 
       // STEP 4: Clean-up environment
@@ -202,6 +210,67 @@ public class Controller {
 
     }
   }
+
+  public void populateLog() {  // SpotBugs finds "Experimental", may fail to clean up rs checked exception
+
+    final String JDBC_DRIVER = "org.h2.Driver";
+
+    final String DB_URL = "jdbc:h2:./res/productionDB";
+
+    //  Database credentials
+
+    final String USER = "";
+
+    final String PASS = ""; // SpotBug finds "Security" issue, no password
+
+    Connection conn = null;
+
+    Statement stmt = null;
+
+    try {
+
+      // STEP 1: Register JDBC driver
+
+      Class.forName(JDBC_DRIVER);
+
+      //STEP 2: Open a connection
+
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+      //STEP 3: Execute a query
+
+      stmt = conn.createStatement();
+
+      String sql = "SELECT * FROM PRODUCTIONRECORD";
+
+      ResultSet rs = stmt.executeQuery(sql);
+      while (rs.next()) {
+
+        int prodNum = rs.getInt("production_num");
+        int prodID = rs.getInt("product_id");
+        String serialNum = rs.getString("serial_num");
+        Date date = rs.getDate("date_produced");
+
+        ProductionRecord productionRecord = new ProductionRecord(prodNum, prodID, serialNum, date);
+
+        productRecord.appendText(productionRecord.toString() + "\n");
+
+      }
+
+      // STEP 4: Clean-up environment
+
+      stmt.close();
+
+      conn.close();
+
+    } catch (ClassNotFoundException | SQLException e) {
+
+      e.printStackTrace();
+
+
+    }
+  }
+
 
   /**
    * inserts user entries to database
@@ -254,7 +323,7 @@ public class Controller {
 
           stmt.executeUpdate();
 
-          updateLists();
+          updateProductLists();
 
           successLabel.setText("Added Successfully.");
           nameText.clear();
@@ -293,7 +362,7 @@ public class Controller {
    * Adds users entries to GUI database list
    */
 
-  public void updateLists() { // SpotBugs finds "Experimental" here, may fail to clean up rs checked exception
+  public void updateProductLists() { // SpotBugs finds "Experimental" here, may fail to clean up rs checked exception
     final String JDBC_DRIVER = "org.h2.Driver";
 
     final String DB_URL = "jdbc:h2:./res/productionDB";
@@ -337,6 +406,68 @@ public class Controller {
         productLine.add(newWidget);
         productList.add(newWidget.toString());
         productSelection.getItems().add(newWidget);
+      }
+
+      // STEP 4: Clean-up environment
+
+      stmt.close();
+
+      conn.close();
+
+    } catch (ClassNotFoundException | SQLException e) {
+
+      e.printStackTrace();
+
+
+    }
+  }
+
+  /**
+   * Adds users entries to GUI database list
+   */
+
+  public void updateLogLists() { // SpotBugs finds "Experimental" here, may fail to clean up rs checked exception
+    final String JDBC_DRIVER = "org.h2.Driver";
+
+    final String DB_URL = "jdbc:h2:./res/productionDB";
+
+    //  Database credentials
+
+    final String USER = "";
+    final String PASS = ""; // SpotBug finds "Security" issue, no password
+
+    Connection conn = null;
+
+    Statement stmt = null;
+
+    try {
+
+      // STEP 1: Register JDBC driver
+
+      Class.forName(JDBC_DRIVER);
+
+      //STEP 2: Open a connection
+
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+      //STEP 3: Execute a query
+
+      stmt = conn.createStatement();
+
+      String sql = "SELECT TOP 1 * FROM PRODUCTIONRECORD ORDER BY PRODUCTION_NUM DESC";
+
+      ResultSet rs = stmt.executeQuery(sql);
+
+      while (rs.next()) {
+        int prodNum = rs.getInt("production_num");
+        int prodID = rs.getInt("product_id");
+        String serialNum = rs.getString("serial_num");
+        Date date = rs.getDate("date_produced");
+
+        ProductionRecord productionRecord = new ProductionRecord(prodNum, prodID, serialNum, date);
+        productionLogs.add(productionRecord);
+        productRecord.appendText(productionRecord.toString() + "\n");
+
 
       }
 
@@ -358,15 +489,70 @@ public class Controller {
    * Adds newly made products to Production Log
    *
    * @param product The newly made product
-   * @param count   The product's manufacturer
    */
 
-  public void addToLog(Product product, int count) {
-    productRecord.setText("");
-    ProductionRecord recordLog = new ProductionRecord(product, count);
-    productionLogs.add(recordLog.toString());
-    for (String a : productionLogs) {
-      productRecord.appendText(a + "\n");
+  public void addToLog(Product product) {
+
+    final String JDBC_DRIVER = "org.h2.Driver";
+
+    final String DB_URL = "jdbc:h2:./res/productionDB";
+
+    //  Database credentials
+
+    final String USER = "";
+
+    final String PASS = ""; // SpotBug finds "Security" issue, no password
+
+    Connection conn = null;
+
+    PreparedStatement stmt = null;
+
+    try {
+
+      // STEP 1: Register JDBC driver
+
+      Class.forName(JDBC_DRIVER);
+      //SpotBugs finds "Bad Practice" here, method may fail to close db resource
+      //STEP 2: Open a connection
+
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+      //STEP 3: Execute a query
+
+      try {//Catches null exceptions for Product Line choice box
+        String sql = " INSERT INTO ProductionRecord(product_id, serial_num, date_produced) VALUES (?, ?, current_timestamp)";
+        ProductionRecord recordLog = new ProductionRecord(product, productionLogs.size());
+        productionLogs.add(recordLog);
+        stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        stmt.setString(2, recordLog.getSerialNumber());
+        stmt.setInt(1, recordLog.getProductID());
+
+        stmt.executeUpdate();
+        updateLogLists();
+
+
+      } catch (NullPointerException e) {
+
+      }
+    } catch (Exception se) {
+      //Handle errors for JDBC
+      se.printStackTrace();
+    }//Handle errors for Class.forName
+    finally {
+      //finally block used to close resources
+      try {
+        if (stmt != null) {
+          conn.close();
+        }
+      } catch (SQLException ignored) {
+      }// do nothing
+      try {
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (SQLException se) {
+        se.printStackTrace();
+      }//end finally try
     }
   }
 
@@ -384,8 +570,7 @@ public class Controller {
       try { // Catches Runtime exceptions
         int tally = Integer.parseInt(cmbBox.getValue());
         for (int i = 0; i < tally; i++) {
-          count++;
-          addToLog(product, count);
+          addToLog(product);
           successLabel2.setText("Added Successfully.");
         }
       } catch (RuntimeException e) {
@@ -399,6 +584,8 @@ public class Controller {
   }
 
 
+  public void createEmp(MouseEvent mouseEvent) {
+  }
 }
 
 
