@@ -64,6 +64,7 @@ public class ProductionRecord {
 
   /**
    * Get products serial number
+   *
    * @return the poducts serial number
    */
 

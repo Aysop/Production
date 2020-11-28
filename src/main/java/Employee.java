@@ -1,3 +1,10 @@
+/*---------------------------------------------------------
+file: Employee.java
+  by: Joseph Morelli
+ org: COP 3003, Fall 2020
+ for: Employee class to hold all relevant info and methods
+---------------------------------------------------------*/
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -109,7 +116,8 @@ public class Employee {
    *
    * @param password The employee's pw
    */
-  private boolean isValidPassword(String password) {
+
+  public boolean isValidPassword(String password) {
     boolean flag = false;
     boolean hasUppercase = !password.equals(password.toLowerCase());
     boolean hasLowercase = !password.equals(password.toUpperCase());

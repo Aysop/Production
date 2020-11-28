@@ -42,9 +42,27 @@ public class Controller {
   @FXML
   public Label errorLabel;
   @FXML
+  public Label successLabel;
+  @FXML
+  public Label errorLabel2;
+  @FXML
+  public Label successLabel2;
+  @FXML
+  public Label errorLabel3;
+  @FXML
+  public Label errorLabel4;
+  @FXML
+  public Label successLabel4;
+  @FXML
+  public Label errorPW;
+  @FXML
   public ListView<Product> productSelection;
   @FXML
   public TableView<Product> productView;
+  @FXML
+  public TextArea newEmpCredentials;
+  @FXML
+  public TextArea productRecord;
   @FXML
   public TableColumn<Product, Integer> idCol;
   @FXML
@@ -62,30 +80,18 @@ public class Controller {
   @FXML
   public TextField newEmpPW;
   @FXML
-  public TextArea newEmpCredentials;
+  public TextField empUsername;
   @FXML
-  public TextArea productRecord;
-  @FXML
-  public Label errorLabel2;
-  @FXML
-  public Label successLabel2;
-  @FXML
-  public Label successLabel;
+  public TextField empPW;
 
   // Class fields
   private final ArrayList<ProductionRecord> productionLogs = new ArrayList<>(); // Holds production logs for TextArea
   private final ArrayList<String> employeeDetails = new ArrayList<>();
-  public TextField empUsername;
-  public TextField empPW;
-  public Label errorLabel4;
-  public Label errorLabel3;
-  public Label successLabel4;
-  private static boolean login = false;
+  private boolean login = false;
   private final ObservableList<String> productList = FXCollections
       .observableArrayList(); // Holds products toString() info for ListView
   private final ObservableList<Product> productLine = FXCollections
       .observableArrayList(); // Holds product info for TableView
-
 
   /**
    * Functions in it run at start
@@ -99,16 +105,18 @@ public class Controller {
     populateLog();
   }
 
+  // Mouse Events
 
   /**
    * Handles button actions on Product Line tab
+   *
    * @param mouseEvent watches for mouse clicks
    */
 
   public void addProduct(MouseEvent mouseEvent) {
     if (login) {
       try {
-        addToDB();
+        addProdToDB();
       } catch (NullPointerException e) {
         errorLabel.setText("Please fill out all the forms.");
       }
@@ -228,6 +236,7 @@ public class Controller {
 
   }
 
+  // Class Methods
 
   /**
    * Assigns value types for the database's table columns
@@ -272,7 +281,7 @@ public class Controller {
    * Populates database list
    */
 
-  @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD")
+  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD")
   // Used an application login instead
   public void populateDB() {  // SpotBugs finds "Experimental", may fail to clean up rs checked exception
     final String JDBC_DRIVER = "org.h2.Driver";
@@ -401,7 +410,7 @@ public class Controller {
    */
 
   @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD") // Used an application login instead
-  public void addToDB() {
+  public void addProdToDB() {
     successLabel.setText("");
     errorLabel.setText("");
 
@@ -502,6 +511,171 @@ public class Controller {
 
           conn.close();
 
+        }
+      } catch (SQLException se) {
+        se.printStackTrace();
+      }//end finally try
+    }
+  }
+
+  /**
+   * Adds newly made products to Production Log
+   *
+   * @param product The newly made product
+   */
+
+  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD") // Used an application login instead
+  public void addProdToLog(Product product) {
+
+    final String JDBC_DRIVER = "org.h2.Driver";
+
+    final String DB_URL = "jdbc:h2:./res/productionDB";
+
+    //  Database credentials
+
+    final String USER = "";
+
+    final String PASS = ""; // SpotBug finds "Security" issue, no password
+
+    Connection conn = null;
+
+    PreparedStatement stmt = null;
+
+    try {
+
+      // STEP 1: Register JDBC driver
+
+      Class.forName(JDBC_DRIVER);
+      //SpotBugs finds "Bad Practice" here, method may fail to close db resource
+      //STEP 2: Open a connection
+
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+      //STEP 3: Execute a query
+
+      try {//Catches null exceptions for Product Line choice box
+        String sql = " INSERT INTO ProductionRecord(product_id, serial_num, date_produced) VALUES (?, ?, current_timestamp)";
+        ProductionRecord recordLog = new ProductionRecord(product, productionLogs.size());
+        productionLogs.add(recordLog);
+        stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        stmt.setString(2, recordLog.getSerialNumber());
+        stmt.setInt(1, recordLog.getProductID());
+
+        stmt.executeUpdate();
+        updateLogLists();
+
+
+      } catch (NullPointerException e) {
+        System.out.println("oof");
+      }
+    } catch (Exception se) {
+      //Handle errors for JDBC
+      se.printStackTrace();
+    }//Handle errors for Class.forName
+    finally {
+      //finally block used to close resources
+      try {
+        if (stmt != null) {
+          stmt.close();
+          conn.close();
+        }
+      } catch (SQLException ignored) {
+      }// do nothing
+      try {
+        if (conn != null) {
+          assert stmt != null;
+          stmt.close();
+          conn.close();
+        }
+      } catch (SQLException se) {
+        se.printStackTrace();
+      }//end finally try
+    }
+  }
+
+  /**
+   * inserts new users into employee database
+   */
+
+  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD") // Used an application login instead
+  public void addEmpToDB() {
+
+    final String JDBC_DRIVER = "org.h2.Driver";
+
+    final String DB_URL = "jdbc:h2:./res/productionDB";
+
+    //  Database credentials
+
+    final String USER = "";
+
+    final String PASS = ""; // SpotBug finds "Security" issue, no password
+
+    Connection conn = null;
+
+    PreparedStatement stmt = null;
+
+    try {
+
+      // STEP 1: Register JDBC driver
+
+      Class.forName(JDBC_DRIVER);
+      //SpotBugs finds "Bad Practice" here, method may fail to close db resource
+      //STEP 2: Open a connection
+
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+      //STEP 3: Execute a query
+
+      try {//Catches null exceptions for Product Line choice box
+        String sql = " INSERT INTO EMPLOYEE(name, email, username, password) VALUES (?, ?, ?, ?)";
+        String empName = newEmpName.getText();
+        String empPW = newEmpPW.getText();
+
+        Employee newEmployee = new Employee(empName, empPW);
+        stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        if (newEmployee.isValidPassword(empPW)) {
+          stmt.setString(4, reverseString(newEmployee.getPassword()));
+          stmt.setString(3, newEmployee.getUsername());
+          stmt.setString(2, newEmployee.getEmail());
+          stmt.setString(1, newEmployee.getName().toString());
+
+          stmt.executeUpdate();
+          newEmpName.clear();
+          newEmpPW.clear();
+          newEmpCredentials.setText(newEmployee.toString());
+
+        } else {
+          errorPW.setText("PW must contain a cap. letter, number, and spec. char.");
+          PauseTransition visiblePause = new PauseTransition(
+              Duration.seconds(3)
+          );
+          visiblePause.setOnFinished(
+              event -> errorPW.setText("")
+          );
+          visiblePause.play();
+        }
+
+      } catch (NullPointerException e) {
+        System.out.println("oof");
+      }
+    } catch (Exception se) {
+      //Handle errors for JDBC
+      se.printStackTrace();
+    }//Handle errors for Class.forName
+    finally {
+      //finally block used to close resources
+      try {
+        if (stmt != null) {
+          stmt.close();
+          conn.close();
+        }
+      } catch (SQLException ignored) {
+      }// do nothing
+      try {
+        if (conn != null) {
+          assert stmt != null;
+          stmt.close();
+          conn.close();
         }
       } catch (SQLException se) {
         se.printStackTrace();
@@ -637,80 +811,6 @@ public class Controller {
     }
   }
 
-  /**
-   * Adds newly made products to Production Log
-   *
-   * @param product The newly made product
-   */
-
-  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD") // Used an application login instead
-  public void addToLog(Product product) {
-
-    final String JDBC_DRIVER = "org.h2.Driver";
-
-    final String DB_URL = "jdbc:h2:./res/productionDB";
-
-    //  Database credentials
-
-    final String USER = "";
-
-    final String PASS = ""; // SpotBug finds "Security" issue, no password
-
-    Connection conn = null;
-
-    PreparedStatement stmt = null;
-
-    try {
-
-      // STEP 1: Register JDBC driver
-
-      Class.forName(JDBC_DRIVER);
-      //SpotBugs finds "Bad Practice" here, method may fail to close db resource
-      //STEP 2: Open a connection
-
-      conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-      //STEP 3: Execute a query
-
-      try {//Catches null exceptions for Product Line choice box
-        String sql = " INSERT INTO ProductionRecord(product_id, serial_num, date_produced) VALUES (?, ?, current_timestamp)";
-        ProductionRecord recordLog = new ProductionRecord(product, productionLogs.size());
-        productionLogs.add(recordLog);
-        stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        stmt.setString(2, recordLog.getSerialNumber());
-        stmt.setInt(1, recordLog.getProductID());
-
-        stmt.executeUpdate();
-        updateLogLists();
-
-
-      } catch (NullPointerException e) {
-        System.out.println("oof");
-      }
-    } catch (Exception se) {
-      //Handle errors for JDBC
-      se.printStackTrace();
-    }//Handle errors for Class.forName
-    finally {
-      //finally block used to close resources
-      try {
-        if (stmt != null) {
-          stmt.close();
-          conn.close();
-        }
-      } catch (SQLException ignored) {
-      }// do nothing
-      try {
-        if (conn != null) {
-          assert stmt != null;
-          stmt.close();
-          conn.close();
-        }
-      } catch (SQLException se) {
-        se.printStackTrace();
-      }//end finally try
-    }
-  }
 
   /**
    * Creates new product in the "Produce" tab
@@ -726,7 +826,7 @@ public class Controller {
       try { // Catches Runtime exceptions
         int tally = Integer.parseInt(cmbBox.getValue());
         for (int i = 0; i < tally; i++) {
-          addToLog(product);
+          addProdToLog(product);
           successLabel2.setText("Added Successfully.");
           PauseTransition visiblePause = new PauseTransition(
               Duration.seconds(3)
@@ -763,85 +863,6 @@ public class Controller {
 
   }
 
-  /**
-   * inserts new users into employee database
-   */
-
-  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD") // Used an application login instead
-  public void addEmpToDB() {
-
-    final String JDBC_DRIVER = "org.h2.Driver";
-
-    final String DB_URL = "jdbc:h2:./res/productionDB";
-
-    //  Database credentials
-
-    final String USER = "";
-
-    final String PASS = ""; // SpotBug finds "Security" issue, no password
-
-    Connection conn = null;
-
-    PreparedStatement stmt = null;
-
-    try {
-
-      // STEP 1: Register JDBC driver
-
-      Class.forName(JDBC_DRIVER);
-      //SpotBugs finds "Bad Practice" here, method may fail to close db resource
-      //STEP 2: Open a connection
-
-      conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-      //STEP 3: Execute a query
-
-      try {//Catches null exceptions for Product Line choice box
-        String sql = " INSERT INTO EMPLOYEE(name, email, username, password) VALUES (?, ?, ?, ?)";
-        String empName = newEmpName.getText();
-        String empPW = newEmpPW.getText();
-
-        Employee newEmployee = new Employee(empName, empPW);
-
-        stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        stmt.setString(4, reverseString(newEmployee.getPassword()));
-        stmt.setString(3, newEmployee.getUsername());
-        stmt.setString(2, newEmployee.getEmail());
-        stmt.setString(1, newEmployee.getName().toString());
-
-        stmt.executeUpdate();
-        newEmpName.clear();
-        newEmpPW.clear();
-        newEmpCredentials.setText(newEmployee.toString());
-
-
-      } catch (NullPointerException e) {
-        System.out.println("oof");
-      }
-    } catch (Exception se) {
-      //Handle errors for JDBC
-      se.printStackTrace();
-    }//Handle errors for Class.forName
-    finally {
-      //finally block used to close resources
-      try {
-        if (stmt != null) {
-          stmt.close();
-          conn.close();
-        }
-      } catch (SQLException ignored) {
-      }// do nothing
-      try {
-        if (conn != null) {
-          assert stmt != null;
-          stmt.close();
-          conn.close();
-        }
-      } catch (SQLException se) {
-        se.printStackTrace();
-      }//end finally try
-    }
-  }
 
   /**
    * Fetches all the current employees details in the DB
