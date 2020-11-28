@@ -6,6 +6,6 @@ file: MonitorType.java
 ---------------------------------------------------------*/
 
 public enum MonitorType {
-  LCD,
-  LED
+  @SuppressWarnings("unused") LCD,
+  @SuppressWarnings("unused") LED
 }

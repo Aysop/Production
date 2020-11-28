@@ -5,6 +5,7 @@ file: Screen.java
  for: Screen class to hold relevant product info.
 ---------------------------------------------------------*/
 
+@SuppressWarnings("unused")
 public class Screen implements ScreenSpec {
 
   // Class fields

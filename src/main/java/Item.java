@@ -5,6 +5,7 @@ file: Item.java
  for: Headers for Item accessor/mutator methods.
 ---------------------------------------------------------*/
 
+@SuppressWarnings("ALL")
 public interface Item {
 
   int getId();

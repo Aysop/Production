@@ -5,6 +5,7 @@ file: AudioPlayer.java
  for: AudioPlayer class to hold relevant product info..
 ---------------------------------------------------------*/
 
+@SuppressWarnings("ALL")
 public class AudioPlayer extends Product implements MultimediaControl {
 
   // Class fields

@@ -8,6 +8,7 @@ file: ProductionRecord.java
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Date;
 
+@SuppressWarnings("ALL")
 public class ProductionRecord {
 
   private int productionNumber;

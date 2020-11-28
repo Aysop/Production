@@ -5,6 +5,7 @@ file: MoviePlayer.java
  for: MoviePlayer class to hold relevant product info.
 ---------------------------------------------------------*/
 
+@SuppressWarnings("unused")
 public class MoviePlayer extends Product implements MultimediaControl {
 
   //Class fields

@@ -5,6 +5,7 @@ file: MultimediaControl.java
  for: Headers for MultiMedia control methods.
 ---------------------------------------------------------*/
 
+@SuppressWarnings("unused")
 public interface MultimediaControl {
 
   void play();

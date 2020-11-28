@@ -21,6 +21,7 @@ public abstract class Product implements Item {
    * @return the products name
    */
 
+  @SuppressWarnings("unused")
   public int getId() {
     return id;
   }
@@ -31,10 +32,12 @@ public abstract class Product implements Item {
    * @return the products name
    */
 
+  @SuppressWarnings("unused")
   public String getName() {
     return name;
   }
 
+  @SuppressWarnings("unused")
   public void setName(String name) {
     this.name = name;
   }
@@ -45,10 +48,12 @@ public abstract class Product implements Item {
    * @return the products manufacturer
    */
 
+  @SuppressWarnings("unused")
   public String getManufacturer() {
     return manufacturer;
   }
 
+  @SuppressWarnings("unused")
   public void setManufacturer(String manufacturer) {
     this.manufacturer = manufacturer;
   }
@@ -59,10 +64,12 @@ public abstract class Product implements Item {
    * @return the products type
    */
 
+  @SuppressWarnings("unused")
   public ItemType getType() {
     return type;
   }
 
+  @SuppressWarnings("unused")
   public void setType(ItemType type) {
     this.type = type;
   }
