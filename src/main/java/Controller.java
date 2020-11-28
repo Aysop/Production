@@ -6,10 +6,10 @@ file: Controller.java
       functionality.
 ---------------------------------------------------------*/
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Properties;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,6 +31,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javafx.util.Duration;
 
+@SuppressWarnings("unused")
 public class Controller {
 
   // FXML Class Fields
@@ -74,28 +75,17 @@ public class Controller {
   // Class fields
   private final ArrayList<ProductionRecord> productionLogs = new ArrayList<>(); // Holds production logs for TextArea
   private final ArrayList<String> employeeDetails = new ArrayList<>();
+  public TextField empUsername;
+  public TextField empPW;
+  public Label errorLabel4;
+  public Label errorLabel3;
+  public Label successLabel4;
+  private static boolean login = false;
   private final ObservableList<String> productList = FXCollections
       .observableArrayList(); // Holds products toString() info for ListView
   private final ObservableList<Product> productLine = FXCollections
       .observableArrayList(); // Holds product info for TableView
-  Properties prop = new Properties();
 
-
-  /**
-   * Handles button actions on Product Line tab
-   */
-
-  public void addProduct(MouseEvent mouseEvent) {
-    addToDB();
-  }
-
-  /**
-   * Handles button actions on Produce tab
-   */
-
-  public void recordProduction(MouseEvent mouseEvent) {
-    createItem();
-  }
 
   /**
    * Functions in it run at start
@@ -107,6 +97,128 @@ public class Controller {
     populateCmbBox();
     populateDB();
     populateLog();
+  }
+
+
+  /**
+   * Handles button actions on Product Line tab
+   */
+
+  public void addProduct(MouseEvent mouseEvent) {
+    if (login) {
+      try {
+        addToDB();
+      } catch (NullPointerException e) {
+        errorLabel.setText("Please fill out all the forms.");
+      }
+    } else {
+      errorLabel.setText("You must login to do this.");
+      PauseTransition visiblePause = new PauseTransition(
+          Duration.seconds(3)
+      );
+      visiblePause.setOnFinished(
+          event -> errorLabel.setText("")
+      );
+      visiblePause.play();
+    }
+
+  }
+
+  /**
+   * Handles button actions on Produce tab
+   */
+
+  public void recordProduction(MouseEvent mouseEvent) {
+    if (login) {
+      createItem();
+    } else {
+      errorLabel2.setText("You must login to do this.");
+      PauseTransition visiblePause = new PauseTransition(
+          Duration.seconds(3)
+      );
+      visiblePause.setOnFinished(
+          event -> errorLabel2.setText("")
+      );
+      visiblePause.play();
+    }
+
+  }
+
+  /**
+   * Create new employee
+   */
+
+  public void createEmp(MouseEvent mouseEvent) {
+    if (login && (newEmpName.getText().equals("") || newEmpPW.getText().equals(""))) {
+      errorLabel3.setText("Please fill in both fields");
+      PauseTransition visiblePause = new PauseTransition(
+          Duration.seconds(3)
+      );
+      visiblePause.setOnFinished(
+          event -> errorLabel3.setText("")
+      );
+      visiblePause.play();
+    } else if (login) {
+      addEmpToDB();
+    } else {
+      errorLabel3.setText("You must login to do this.");
+      PauseTransition visiblePause = new PauseTransition(
+          Duration.seconds(3)
+      );
+      visiblePause.setOnFinished(
+          event -> errorLabel3.setText("")
+      );
+      visiblePause.play();
+    }
+
+  }
+
+  /**
+   * List all the current employees in the Employees table of the DB
+   */
+
+  public void listEmployees(MouseEvent mouseEvent) {
+    if (login) {
+      fetchAllEmpDetails();
+      newEmpCredentials.clear();
+      for (String empDetails : employeeDetails) {
+        newEmpCredentials.appendText(empDetails);
+      }
+    } else {
+      errorLabel3.setText("You must login to do this.");
+      PauseTransition visiblePause = new PauseTransition(
+          Duration.seconds(3)
+      );
+      visiblePause.setOnFinished(
+          event -> errorLabel3.setText("")
+      );
+      visiblePause.play();
+    }
+
+  }
+
+  /**
+   * Calls the attemptLogin() method
+   *
+   * @param mouseEvent checks if login-button is clicked
+   */
+
+  public void login(MouseEvent mouseEvent) {
+    if (!login) {
+      attemptLogin();
+    } else {
+      empUsername.clear();
+      empPW.clear();
+      successLabel4.setText("You're already logged in to an account.");
+      PauseTransition visiblePause = new PauseTransition(
+          Duration.seconds(3)
+      );
+      visiblePause.setOnFinished(
+          event -> successLabel4.setText("")
+      );
+      visiblePause.play();
+    }
+
   }
 
 
@@ -153,8 +265,9 @@ public class Controller {
    * Populates database list
    */
 
+  @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD")
+  // Used an application login instead
   public void populateDB() {  // SpotBugs finds "Experimental", may fail to clean up rs checked exception
-
     final String JDBC_DRIVER = "org.h2.Driver";
 
     final String DB_URL = "jdbc:h2:./res/productionDB";
@@ -165,9 +278,9 @@ public class Controller {
 
     final String PASS = ""; // SpotBug finds "Security" issue, no password
 
-    Connection conn = null;
+    Connection conn;
 
-    Statement stmt = null;
+    Statement stmt;
 
     try {
 
@@ -219,8 +332,8 @@ public class Controller {
    * Populates production log list
    */
 
-  public void populateLog() {  // SpotBugs finds "Experimental", may fail to clean up rs checked exception
-
+  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD") // Used an application login instead
+  public void populateLog() {
     final String JDBC_DRIVER = "org.h2.Driver";
 
     final String DB_URL = "jdbc:h2:./res/productionDB";
@@ -231,9 +344,9 @@ public class Controller {
 
     final String PASS = ""; // SpotBug finds "Security" issue, no password
 
-    Connection conn = null;
+    Connection conn;
 
-    Statement stmt = null;
+    Statement stmt;
 
     try {
 
@@ -263,28 +376,24 @@ public class Controller {
         productionRecord.calibrateCount();
 
         productRecord.appendText(productionRecord.toString() + "\n");
-
       }
 
       // STEP 4: Clean-up environment
-
       stmt.close();
-
       conn.close();
 
     } catch (ClassNotFoundException | SQLException e) {
 
       e.printStackTrace();
-
-
     }
   }
 
 
   /**
-   * inserts user entries to database
+   * inserts user entries to product database
    */
 
+  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD") // Used an application login instead
   public void addToDB() {
     successLabel.setText("");
     errorLabel.setText("");
@@ -381,8 +490,11 @@ public class Controller {
       try {
         if (conn != null) {
           assert stmt != null;
+
           stmt.close();
+
           conn.close();
+
         }
       } catch (SQLException se) {
         se.printStackTrace();
@@ -395,6 +507,7 @@ public class Controller {
    * Adds users entries to GUI database list
    */
 
+  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD") // Used an application login instead
   public void updateProductLists() { // SpotBugs finds "Experimental" here, may fail to clean up rs checked exception
     final String JDBC_DRIVER = "org.h2.Driver";
 
@@ -406,9 +519,9 @@ public class Controller {
 
     final String PASS = ""; // SpotBug finds "Security" issue, no password
 
-    Connection conn = null;
+    Connection conn;
 
-    Statement stmt = null;
+    Statement stmt;
 
     try {
 
@@ -458,6 +571,7 @@ public class Controller {
    * Adds users entries to GUI database list
    */
 
+  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD") // Used an application login instead
   public void updateLogLists() { // SpotBugs finds "Experimental" here, may fail to clean up rs checked exception
     final String JDBC_DRIVER = "org.h2.Driver";
 
@@ -468,9 +582,9 @@ public class Controller {
     final String USER = "";
     final String PASS = ""; // SpotBug finds "Security" issue, no password
 
-    Connection conn = null;
+    Connection conn;
 
-    Statement stmt = null;
+    Statement stmt;
 
     try {
 
@@ -522,6 +636,7 @@ public class Controller {
    * @param product The newly made product
    */
 
+  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD") // Used an application login instead
   public void addToLog(Product product) {
 
     final String JDBC_DRIVER = "org.h2.Driver";
@@ -642,19 +757,11 @@ public class Controller {
   }
 
   /**
-   * Create new employee
+   * inserts new users into employee database
    */
 
-  public void createEmp(MouseEvent mouseEvent) {
-
-    try {
-
-
-    } catch (NullPointerException e) {
-      System.out.println("try again");
-    }
-
-
+  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD") // Used an application login instead
+  public void addEmpToDB() {
 
     final String JDBC_DRIVER = "org.h2.Driver";
 
@@ -690,7 +797,7 @@ public class Controller {
         Employee newEmployee = new Employee(empName, empPW);
 
         stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        stmt.setString(4, newEmployee.getPassword());
+        stmt.setString(4, reverseString(newEmployee.getPassword()));
         stmt.setString(3, newEmployee.getUsername());
         stmt.setString(2, newEmployee.getEmail());
         stmt.setString(1, newEmployee.getName().toString());
@@ -729,6 +836,10 @@ public class Controller {
     }
   }
 
+  /**
+   * Fetches all the current employees details in the DB
+   */
+  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD") // Used an application login instead
   public void fetchAllEmpDetails() { // SpotBugs finds "Experimental" here, may fail to clean up rs checked exception
     final String JDBC_DRIVER = "org.h2.Driver";
 
@@ -739,9 +850,9 @@ public class Controller {
     final String USER = "";
     final String PASS = ""; // SpotBug finds "Security" issue, no password
 
-    Connection conn = null;
+    Connection conn;
 
-    Statement stmt = null;
+    Statement stmt;
 
     try {
 
@@ -767,7 +878,7 @@ public class Controller {
         String empName = rs.getString("name");
         String pw = rs.getString("password");
 
-        Employee employee = new Employee(empName, pw);
+        Employee employee = new Employee(empName, reverseString(pw));
         employeeDetails.add(employee.toString());
       }
 
@@ -786,17 +897,106 @@ public class Controller {
   }
 
 
-  public void login(MouseEvent mouseEvent) {
+  /**
+   * Attempts to log user in with the given credentials by searching the employeed DB for username
+   * and password
+   */
+
+  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD")
+  public void attemptLogin() {
+
+    final String JDBC_DRIVER = "org.h2.Driver";
+
+    final String DB_URL = "jdbc:h2:./res/productionDB";
+
+    //  Database credentials
+
+    final String USER = "";
+    final String PASS = ""; // SpotBug finds "Security" issue, no password
+
+    Connection conn;
+
+    Statement stmt;
+
+    try {
+
+      // STEP 1: Register JDBC driver
+
+      Class.forName(JDBC_DRIVER);
+
+      //STEP 2: Open a connection
+
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+      //STEP 3: Execute a query
+
+      stmt = conn.createStatement();
+
+      String sql = "SELECT * FROM EMPLOYEE";
+
+      ResultSet rs = stmt.executeQuery(sql);
+
+      employeeDetails.clear();
+      String welcomeName = "";
+
+      while (rs.next()) {
+        String empUserName = rs.getString("username");
+        String pw = reverseString(rs.getString("password"));
+
+        if (empUserName.equals(empUsername.getText()) && pw.equals(empPW.getText())) {
+          login = true;
+          welcomeName = empUsername.getText();
+        }
+      }
+
+      if (!login) {
+        errorLabel4.setText("Incorrect Credentials. Please Try Again.");
+        empUsername.clear();
+        empPW.clear();
+        PauseTransition visiblePause = new PauseTransition(
+            Duration.seconds(3)
+        );
+        visiblePause.setOnFinished(
+            event -> errorLabel4.setText("")
+        );
+        visiblePause.play();
+      } else {
+        successLabel4.setText("Success! Welcome, " + welcomeName);
+        empUsername.clear();
+        empPW.clear();
+        PauseTransition visiblePause = new PauseTransition(
+            Duration.seconds(3)
+        );
+        visiblePause.setOnFinished(
+            event -> successLabel4.setText("")
+        );
+        visiblePause.play();
+      }
+
+      // STEP 4: Clean-up environment
+
+      stmt.close();
+
+      conn.close();
+
+    } catch (ClassNotFoundException | SQLException e) {
+
+      e.printStackTrace();
 
 
+    }
 
   }
 
-  public void listEmployees(MouseEvent mouseEvent) {
-    fetchAllEmpDetails();
-    newEmpCredentials.clear();
-    for (String empDetails : employeeDetails) {
-      newEmpCredentials.appendText(empDetails);
+  /**
+   * Reverses employee passwords for storing in DB
+   */
+
+  public String reverseString(String pw) {
+    if (pw.isEmpty()) {
+      return pw;
+    } else {
+      return reverseString(pw.substring(1)) + pw.charAt(0);
     }
   }
 }

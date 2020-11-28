@@ -5,6 +5,7 @@ file: ProductionRecord.java
  for: Production Record class to hold relevant product info.
 ---------------------------------------------------------*/
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Date;
 
 public class ProductionRecord {
@@ -145,6 +146,9 @@ public class ProductionRecord {
    * @param product The product needing to be serialized
    */
 
+  @SuppressFBWarnings({"ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD",
+      "ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD", "ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD",
+      "ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"})
   public String determineSerialNumber(Product product) {
     String format = "";
     String manufacturer;
@@ -184,6 +188,13 @@ public class ProductionRecord {
     return serialID;
   }
 
+  /**
+   * Calibrates the serial number counts for each product type upon program restart
+   */
+
+  @SuppressFBWarnings({"ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD",
+      "ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD", "ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD",
+      "ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"})
   public void calibrateCount() {
     switch (getSerialNumber().substring(3, 5)) {
       case "AU":

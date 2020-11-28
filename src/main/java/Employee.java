@@ -3,29 +3,68 @@ import java.util.regex.Pattern;
 
 public class Employee {
 
+  // class fields
+  private final StringBuilder name;
+  private String username;
+  private String email;
+  private final String password;
+
+  /**
+   * fetches user's name
+   */
+
   public StringBuilder getName() {
     return name;
   }
 
-  private final StringBuilder name;
-  private String username;
-  private String email;
-
-  private final String password;
-
+  /**
+   * fetches user's username
+   */
 
   public String getUsername() {
     return username;
   }
 
+  /**
+   * fetches user's password
+   */
+
   public String getPassword() {
     return password;
   }
+
+  /**
+   * fetches user's email
+   */
 
   public String getEmail() {
     return email;
   }
 
+  /**
+   * sets user's username
+   */
+
+  private void setUsername(String name) {
+    this.username =
+        name.toLowerCase().charAt(0) + name.toLowerCase().substring(1 + name.indexOf(" "));
+  }
+
+  /**
+   * sets user's email
+   */
+
+  private void setEmail(String name) {
+    this.email = name.toLowerCase().substring(0, name.indexOf(" ")) + "." + name.toLowerCase()
+        .substring(1 + name.indexOf(" ")) + "@oracleacademy.Test";
+  }
+
+  /**
+   * Employee Constructor
+   *
+   * @param name     The employee's name
+   * @param password The employee's pw
+   */
 
   public Employee(String name, String password) {
 
@@ -46,11 +85,11 @@ public class Employee {
     }
   }
 
-  private void setUsername(String name) {
-    this.username =
-        name.toLowerCase().charAt(0) + name.toLowerCase().substring(1 + name.indexOf(" "));
-  }
-
+  /**
+   * checks if employee's name contains space
+   *
+   * @param name The employee's name
+   */
 
   private boolean checkName(String name) {
     boolean flag = false;
@@ -61,12 +100,11 @@ public class Employee {
     return flag;
   }
 
-
-  private void setEmail(String name) {
-    this.email = name.toLowerCase().substring(0, name.indexOf(" ")) + "." + name.toLowerCase()
-        .substring(1 + name.indexOf(" ")) + "@oracleacademy.Test";
-  }
-
+  /**
+   * checks if employee's pw is valid
+   *
+   * @param password The employee's pw
+   */
   private boolean isValidPassword(String password) {
     boolean flag = false;
     boolean hasUppercase = !password.equals(password.toLowerCase());
@@ -81,6 +119,9 @@ public class Employee {
     return flag;
   }
 
+  /**
+   * generates a string of employee's details
+   */
 
   @Override
   public String toString() {
@@ -88,7 +129,10 @@ public class Employee {
         + "Email : " + email + "\n" + "Initial Password : " + password + "\n\n";
   }
 
+
 }
+
+
 
 
 

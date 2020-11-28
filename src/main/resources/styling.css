@@ -6,7 +6,6 @@ file: <<styling.css>>
 ---------------------------------------------------------*/
 
 
-
 .root {
   -fx-background-color: #2f5b9b;
   -fx-font-family: "Sitka Subheading";
@@ -21,8 +20,4 @@ file: <<styling.css>>
 
 .error_text {
   -fx-text-fill: orangered;
-}
-
-.success_text {
-  -fx-text-fill: green;
 }
