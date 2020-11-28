@@ -3,22 +3,38 @@ import java.util.regex.Pattern;
 
 public class Employee {
 
-  StringBuilder name = new StringBuilder();
+  public StringBuilder getName() {
+    return name;
+  }
 
-  String username;
+  private final StringBuilder name;
+  private String username;
+  private String email;
 
-  String password;
+  private final String password;
 
-  String email;
+
+  public String getUsername() {
+    return username;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
 
   public Employee(String name, String password) {
 
     if (checkName(name)) {
-      this.name.append(name);
+      this.name = new StringBuilder().append(name);
       setEmail(name);
       setUsername(name);
     } else {
-      this.name.append(name);
+      this.name = new StringBuilder().append(name);
       this.username = "default";
       this.email = "user@oracleacademy.Test";
     }
@@ -28,7 +44,6 @@ public class Employee {
     } else {
       this.password = "pw";
     }
-
   }
 
   private void setUsername(String name) {
@@ -56,7 +71,7 @@ public class Employee {
     boolean flag = false;
     boolean hasUppercase = !password.equals(password.toLowerCase());
     boolean hasLowercase = !password.equals(password.toUpperCase());
-    Pattern my_pattern = Pattern.compile("[^a-z]", Pattern.CASE_INSENSITIVE);
+    Pattern my_pattern = Pattern.compile("[^a-z 0-9]", Pattern.CASE_INSENSITIVE);
     Matcher my_match = my_pattern.matcher(password);
     boolean check = my_match.find();
 
@@ -70,7 +85,7 @@ public class Employee {
   @Override
   public String toString() {
     return "Employee Details \n" + "Name : " + name + "\n" + "Username : " + username + "\n"
-        + "Email : " + email + "\n" + "Initial Password : " + password;
+        + "Email : " + email + "\n" + "Initial Password : " + password + "\n\n";
   }
 
 }

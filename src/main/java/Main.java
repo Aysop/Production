@@ -2,7 +2,7 @@
 file: <<Main.java>>
   by: Joseph Morelli
  org: COP 3003, Fall 2020
- for: Introduction to scenebuilder; 3 production
+ for: Introduction to SceneBuilder; 3 production
       tabs scenes have been built on to include
       various text fields, labels, areas, etc.
 ---------------------------------------------------------*/

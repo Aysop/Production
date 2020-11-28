@@ -7,5 +7,5 @@ file: MonitorType.java
 
 public enum MonitorType {
   LCD,
-  LED;
+  LED
 }

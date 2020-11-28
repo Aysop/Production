@@ -8,8 +8,8 @@ file: AudioPlayer.java
 public class AudioPlayer extends Product implements MultimediaControl {
 
   // Class fields
-  private String supportedAudioFormats;
-  private String supportedPlaylistFormats;
+  private final String supportedAudioFormats;
+  private final String supportedPlaylistFormats;
 
   /**
    * Product Constructor

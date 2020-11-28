@@ -8,8 +8,8 @@ file: MoviePlayer.java
 public class MoviePlayer extends Product implements MultimediaControl {
 
   //Class fields
-  private Screen screen;
-  private MonitorType monitorType;
+  private final Screen screen;
+  private final MonitorType monitorType;
 
   /**
    * Product Constructor

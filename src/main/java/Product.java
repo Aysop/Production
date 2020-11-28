@@ -10,7 +10,7 @@ file: Product.java
 public abstract class Product implements Item {
 
   // variable declarations
-  protected int id;
+  protected final int id;
   protected String name;
   protected String manufacturer;
   protected ItemType type;

@@ -9,8 +9,6 @@ import java.util.Date;
 
 public class ProductionRecord {
 
-  // Class fields
-  private String productName;
   private int productionNumber;
   private int productID;
   private String serialNumber;
@@ -85,7 +83,7 @@ public class ProductionRecord {
    */
 
   public Date getDateProduced() {
-    return dateProduced;
+    return dateProduced = new Date(dateProduced.getTime());
   }
 
   /**
@@ -95,7 +93,7 @@ public class ProductionRecord {
    */
 
   public void setDateProduced(Date dateProduced) {
-    this.dateProduced = dateProduced;
+    this.dateProduced = new Date(dateProduced.getTime());
   }
 
   /**
@@ -106,7 +104,7 @@ public class ProductionRecord {
    */
 
   ProductionRecord(Product product, int count) {
-    this.productName = product.name;
+    // Class fields
     this.productionNumber = count;
     productID = product.id;
     serialNumber = determineSerialNumber(product);
@@ -137,7 +135,7 @@ public class ProductionRecord {
   @Override
   public String toString() {
 
-    return "Prod. Num: " + productionNumber + " Product ID: " + productName + " Serial Num: "
+    return "Prod. Num: " + productionNumber + " Product ID: " + productID + " Serial Num: "
         + serialNumber + " Date: " + dateProduced;
   }
 
@@ -149,9 +147,9 @@ public class ProductionRecord {
 
   public String determineSerialNumber(Product product) {
     String format = "";
-    String manufacturer = "";
-    String serialID = "";
-    String placeholder = "";
+    String manufacturer;
+    String serialID;
+    StringBuilder placeholder = new StringBuilder();
 
     switch (product.type.code()) {
       case "AU":
@@ -170,12 +168,13 @@ public class ProductionRecord {
         format = String.format("%05d", countVM);
         countVM++;
         break;
+      default:
+        break;
     }
 
     if (product.manufacturer.length() < 3) { // checks manufacturer name length
-      for (int i = 0; i < 3 - (product.manufacturer.length()); i++) {
-        placeholder += "@"; // appends placeholders for names less than req.
-      }
+      placeholder.append("@".repeat(
+          3 - (product.manufacturer.length()))); // appends placeholders for names less than req.
       manufacturer = product.manufacturer;
       serialID = placeholder + manufacturer + product.type.code() + format;
     } else {
@@ -183,6 +182,25 @@ public class ProductionRecord {
       serialID = manufacturer + product.type.code() + format;
     }
     return serialID;
+  }
+
+  public void calibrateCount() {
+    switch (getSerialNumber().substring(3, 5)) {
+      case "AU":
+        countAU++;
+        break;
+      case "VI":
+        countVI++;
+        break;
+      case "AM":
+        countAM++;
+        break;
+      case "VM":
+        countVM++;
+        break;
+      default:
+        break;
+    }
   }
 
 

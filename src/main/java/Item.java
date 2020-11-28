@@ -7,14 +7,14 @@ file: Item.java
 
 public interface Item {
 
-  public int getId();
+  int getId();
 
-  public String getName();
+  String getName();
 
-  public void setName(String name);
+  void setName(String name);
 
-  public String getManufacturer();
+  String getManufacturer();
 
-  public void setManufacturer(String manufacturer);
+  void setManufacturer(String manufacturer);
 
 }
