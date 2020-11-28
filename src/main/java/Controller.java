@@ -281,9 +281,8 @@ public class Controller {
    * Populates database list
    */
 
-  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD")
-  // Used an application login instead
-  public void populateDB() {  // SpotBugs finds "Experimental", may fail to clean up rs checked exception
+  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD") // Used an application login instead
+  public void populateDB() {
     final String JDBC_DRIVER = "org.h2.Driver";
 
     final String DB_URL = "jdbc:h2:./res/productionDB";
