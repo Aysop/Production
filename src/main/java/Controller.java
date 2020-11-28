@@ -102,6 +102,7 @@ public class Controller {
 
   /**
    * Handles button actions on Product Line tab
+   * @param mouseEvent watches for mouse clicks
    */
 
   public void addProduct(MouseEvent mouseEvent) {
@@ -126,6 +127,8 @@ public class Controller {
 
   /**
    * Handles button actions on Produce tab
+   *
+   * @param mouseEvent watches for mouse clicks
    */
 
   public void recordProduction(MouseEvent mouseEvent) {
@@ -146,6 +149,8 @@ public class Controller {
 
   /**
    * Create new employee
+   *
+   * @param mouseEvent watches for mouse clicks
    */
 
   public void createEmp(MouseEvent mouseEvent) {
@@ -175,6 +180,8 @@ public class Controller {
 
   /**
    * List all the current employees in the Employees table of the DB
+   *
+   * @param mouseEvent watches for mouse clicks
    */
 
   public void listEmployees(MouseEvent mouseEvent) {
@@ -990,6 +997,9 @@ public class Controller {
 
   /**
    * Reverses employee passwords for storing in DB
+   *
+   * @param pw password that is to be reversed
+   * @return the reversed password
    */
 
   public String reverseString(String pw) {

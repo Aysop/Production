@@ -62,7 +62,8 @@ public class ProductionRecord {
   }
 
   /**
-   * Product Record gets and sets
+   * Get products serial number
+   * @return the poducts serial number
    */
 
   public String getSerialNumber() {
@@ -80,7 +81,9 @@ public class ProductionRecord {
   }
 
   /**
-   * Product Record gets and sets
+   * Get the date product was produced
+   *
+   * @return dateProduced product's production date
    */
 
   public Date getDateProduced() {
@@ -144,6 +147,7 @@ public class ProductionRecord {
    * Determines products serial number
    *
    * @param product The product needing to be serialized
+   * @return serialNumber The products newly generated SN
    */
 
   @SuppressFBWarnings({"ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD",

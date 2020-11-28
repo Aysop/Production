@@ -11,6 +11,7 @@ public class Employee {
 
   /**
    * fetches user's name
+   * @return user's name
    */
 
   public StringBuilder getName() {
@@ -19,6 +20,7 @@ public class Employee {
 
   /**
    * fetches user's username
+   * @return user's username
    */
 
   public String getUsername() {
@@ -27,6 +29,7 @@ public class Employee {
 
   /**
    * fetches user's password
+   * @return user's pw
    */
 
   public String getPassword() {
@@ -35,6 +38,7 @@ public class Employee {
 
   /**
    * fetches user's email
+   * @return user's email
    */
 
   public String getEmail() {

@@ -70,6 +70,7 @@ public abstract class Product implements Item {
   /**
    * Product Constructor
    *
+   * @param id           The product's id
    * @param name         The product's name
    * @param manufacturer The product's manufacturer
    * @param type         The product's type
