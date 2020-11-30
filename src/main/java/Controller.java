@@ -7,9 +7,12 @@ file: Controller.java
 ---------------------------------------------------------*/
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Scanner;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -130,7 +133,6 @@ public class Controller {
       );
       visiblePause.play();
     }
-
   }
 
   /**
@@ -152,7 +154,6 @@ public class Controller {
       );
       visiblePause.play();
     }
-
   }
 
   /**
@@ -183,7 +184,6 @@ public class Controller {
       );
       visiblePause.play();
     }
-
   }
 
   /**
@@ -209,7 +209,6 @@ public class Controller {
       );
       visiblePause.play();
     }
-
   }
 
   /**
@@ -233,7 +232,6 @@ public class Controller {
       );
       visiblePause.play();
     }
-
   }
 
   // Class Methods
@@ -260,7 +258,6 @@ public class Controller {
     for (ItemType item : ItemType.values()) {
       choiceBox.getItems().add(item);
     }
-
   }
 
   /**
@@ -281,18 +278,21 @@ public class Controller {
    * Populates database list
    */
 
-  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD") // Used an application login instead
   public void populateDB() {
     final String JDBC_DRIVER = "org.h2.Driver";
-
     final String DB_URL = "jdbc:h2:./res/productionDB";
 
     //  Database credentials
-
+    File myFile = new File("./src/main/resources/pw.txt");
+    Scanner sc = null;
+    try {
+      sc = new Scanner(myFile);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
     final String USER = "";
-
-    final String PASS = ""; // SpotBug finds "Security" issue, no password
-
+    assert sc != null;
+    final String PASS = sc.nextLine();
     Connection conn;
 
     Statement stmt;
@@ -332,9 +332,7 @@ public class Controller {
       // STEP 4: Clean-up environment
 
       stmt.close();
-
       conn.close();
-
     } catch (ClassNotFoundException | SQLException e) {
 
       e.printStackTrace();
@@ -347,20 +345,23 @@ public class Controller {
    * Populates production log list
    */
 
-  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD") // Used an application login instead
   public void populateLog() {
     final String JDBC_DRIVER = "org.h2.Driver";
-
     final String DB_URL = "jdbc:h2:./res/productionDB";
 
     //  Database credentials
 
+    File myFile = new File("./src/main/resources/pw.txt");
+    Scanner sc = null;
+    try {
+      sc = new Scanner(myFile);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
     final String USER = "";
-
-    final String PASS = ""; // SpotBug finds "Security" issue, no password
-
+    assert sc != null;
+    final String PASS = sc.nextLine();
     Connection conn;
-
     Statement stmt;
 
     try {
@@ -408,7 +409,6 @@ public class Controller {
    * inserts user entries to product database
    */
 
-  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD") // Used an application login instead
   public void addProdToDB() {
     successLabel.setText("");
     errorLabel.setText("");
@@ -419,12 +419,18 @@ public class Controller {
 
     //  Database credentials
 
+    File myFile = new File("./src/main/resources/pw.txt");
+    Scanner sc = null;
+    try {
+      sc = new Scanner(myFile);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
     final String USER = "";
-
-    final String PASS = ""; // SpotBug finds "Security" issue, no password
+    assert sc != null;
+    final String PASS = sc.nextLine();
 
     Connection conn = null;
-
     PreparedStatement stmt = null;
 
     try {
@@ -507,7 +513,6 @@ public class Controller {
           assert stmt != null;
 
           stmt.close();
-
           conn.close();
 
         }
@@ -523,21 +528,25 @@ public class Controller {
    * @param product The newly made product
    */
 
-  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD") // Used an application login instead
   public void addProdToLog(Product product) {
 
     final String JDBC_DRIVER = "org.h2.Driver";
-
     final String DB_URL = "jdbc:h2:./res/productionDB";
 
     //  Database credentials
 
+    File myFile = new File("./src/main/resources/pw.txt");
+    Scanner sc = null;
+    try {
+      sc = new Scanner(myFile);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
     final String USER = "";
-
-    final String PASS = ""; // SpotBug finds "Security" issue, no password
+    assert sc != null;
+    final String PASS = sc.nextLine();
 
     Connection conn = null;
-
     PreparedStatement stmt = null;
 
     try {
@@ -596,21 +605,25 @@ public class Controller {
    * inserts new users into employee database
    */
 
-  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD") // Used an application login instead
   public void addEmpToDB() {
 
     final String JDBC_DRIVER = "org.h2.Driver";
-
     final String DB_URL = "jdbc:h2:./res/productionDB";
 
     //  Database credentials
 
+    File myFile = new File("./src/main/resources/pw.txt");
+    Scanner sc = null;
+    try {
+      sc = new Scanner(myFile);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
     final String USER = "";
-
-    final String PASS = ""; // SpotBug finds "Security" issue, no password
+    assert sc != null;
+    final String PASS = sc.nextLine();
 
     Connection conn = null;
-
     PreparedStatement stmt = null;
 
     try {
@@ -687,20 +700,24 @@ public class Controller {
    * Adds users entries to GUI database list
    */
 
-  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD") // Used an application login instead
   public void updateProductLists() { // SpotBugs finds "Experimental" here, may fail to clean up rs checked exception
     final String JDBC_DRIVER = "org.h2.Driver";
-
     final String DB_URL = "jdbc:h2:./res/productionDB";
 
     //  Database credentials
 
+    File myFile = new File("./src/main/resources/pw.txt");
+    Scanner sc = null;
+    try {
+      sc = new Scanner(myFile);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
     final String USER = "";
-
-    final String PASS = ""; // SpotBug finds "Security" issue, no password
+    assert sc != null;
+    final String PASS = sc.nextLine();
 
     Connection conn;
-
     Statement stmt;
 
     try {
@@ -737,7 +754,6 @@ public class Controller {
       // STEP 4: Clean-up environment
 
       stmt.close();
-
       conn.close();
 
     } catch (ClassNotFoundException | SQLException e) {
@@ -751,7 +767,6 @@ public class Controller {
    * Adds users entries to GUI database list
    */
 
-  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD") // Used an application login instead
   public void updateLogLists() { // SpotBugs finds "Experimental" here, may fail to clean up rs checked exception
     final String JDBC_DRIVER = "org.h2.Driver";
 
@@ -759,11 +774,18 @@ public class Controller {
 
     //  Database credentials
 
+    File myFile = new File("./src/main/resources/pw.txt");
+    Scanner sc = null;
+    try {
+      sc = new Scanner(myFile);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
     final String USER = "";
-    final String PASS = ""; // SpotBug finds "Security" issue, no password
+    assert sc != null;
+    final String PASS = sc.nextLine();
 
     Connection conn;
-
     Statement stmt;
 
     try {
@@ -799,13 +821,11 @@ public class Controller {
       // STEP 4: Clean-up environment
 
       stmt.close();
-
       conn.close();
 
     } catch (ClassNotFoundException | SQLException e) {
 
       e.printStackTrace();
-
 
     }
   }
@@ -834,8 +854,6 @@ public class Controller {
               event -> successLabel2.setText("")
           );
           visiblePause.play();
-
-
         }
       } catch (RuntimeException e) {
         errorLabel2.setText("Please enter a #.");
@@ -857,16 +875,14 @@ public class Controller {
           event -> errorLabel2.setText("")
       );
       visiblePause.play();
-
     }
-
   }
 
 
   /**
    * Fetches all the current employees details in the DB
    */
-  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD") // Used an application login instead
+
   public void fetchAllEmpDetails() { // SpotBugs finds "Experimental" here, may fail to clean up rs checked exception
     final String JDBC_DRIVER = "org.h2.Driver";
 
@@ -874,11 +890,18 @@ public class Controller {
 
     //  Database credentials
 
+    File myFile = new File("./src/main/resources/pw.txt");
+    Scanner sc = null;
+    try {
+      sc = new Scanner(myFile);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
     final String USER = "";
-    final String PASS = ""; // SpotBug finds "Security" issue, no password
+    assert sc != null;
+    final String PASS = sc.nextLine();
 
     Connection conn;
-
     Statement stmt;
 
     try {
@@ -919,7 +942,6 @@ public class Controller {
 
       e.printStackTrace();
 
-
     }
   }
 
@@ -929,7 +951,6 @@ public class Controller {
    * and password
    */
 
-  @SuppressFBWarnings("DMI_EMPTY_DB_PASSWORD")
   public void attemptLogin() {
 
     final String JDBC_DRIVER = "org.h2.Driver";
@@ -938,8 +959,16 @@ public class Controller {
 
     //  Database credentials
 
+    File myFile = new File("./src/main/resources/pw.txt");
+    Scanner sc = null;
+    try {
+      sc = new Scanner(myFile);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
     final String USER = "";
-    final String PASS = ""; // SpotBug finds "Security" issue, no password
+    assert sc != null;
+    final String PASS = sc.nextLine();
 
     Connection conn;
 
@@ -1009,7 +1038,6 @@ public class Controller {
     } catch (ClassNotFoundException | SQLException e) {
 
       e.printStackTrace();
-
 
     }
 
