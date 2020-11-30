@@ -293,8 +293,8 @@ public class Controller {
     final String USER = "";
     assert sc != null;
     final String PASS = sc.nextLine();
-    Connection conn;
 
+    Connection conn;
     Statement stmt;
 
     try {
@@ -361,6 +361,7 @@ public class Controller {
     final String USER = "";
     assert sc != null;
     final String PASS = sc.nextLine();
+
     Connection conn;
     Statement stmt;
 
