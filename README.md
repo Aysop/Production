@@ -7,7 +7,7 @@ In addition to this, the application is locked and accessible via the "Login" ta
 table of the database- but new users can be added by these users via the "Create Employee" tab. 
 
 # Java Doc
-[a link](http://Yewklid.github.io/Production)
+[a link](https://yewklid.github.io/Production/)
 
 # Project Project Class Diagram:
 ![ProductionProjDiagrams](https://user-images.githubusercontent.com/47838762/100519882-b05a4d80-3168-11eb-8e0a-dd16b3443eae.PNG)
