@@ -104,7 +104,7 @@ class Widget extends Product {
 
   /**
    * Product Constructor
-   *
+   * @param id           The product's id
    * @param name         The product's name
    * @param manufacturer The product's manufacturer
    * @param type         The product's type

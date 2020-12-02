@@ -115,6 +115,7 @@ public class Employee {
    * checks if employee's pw is valid
    *
    * @param password The employee's pw
+   * @return  the methods determination
    */
 
   public boolean isValidPassword(String password) {
