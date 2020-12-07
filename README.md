@@ -10,7 +10,7 @@ table of the database- but new users can be added by these users via the "Create
 ![Production](https://user-images.githubusercontent.com/47838762/101231972-d1490400-367c-11eb-8c10-7da2f7b0eff7.gif)
 
 # Java Doc
-The project's Java Doc can be reviewed-[here](https://yewklid.github.io/Production/Item.html)
+The project's Java Doc can be reviewed-[here](https://yewklid.github.io/Production/package-summary.html)
 
 # Project Project Class Diagram:
 ![ProductionProjDiagrams](https://user-images.githubusercontent.com/47838762/100519882-b05a4d80-3168-11eb-8e0a-dd16b3443eae.PNG)
